@@ -1,14 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import SplashScreen from './features/onboarding/SplashScreen';
+import AppNavigator from './navigations/AppNavigator';
 
 export default function App() {
-  return (
-    <View style={styles.container}>
-      <SplashScreen />
-      <StatusBar style='auto' />
-    </View>
-  );
+  return <AppNavigator />;
 }
 
 const styles = StyleSheet.create({

@@ -8,33 +8,16 @@ import {
   TouchableOpacity,
   Dimensions,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { LOGO } from '../../assets/images/logo';
 import { ICONS } from '../../assets/images/icons';
-import { useEffect } from 'react';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-import { RootStackParamList } from '../../navigations/AppNavigator';
 import { COLORS } from '../../constants/color';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-type Props = NativeStackScreenProps<RootStackParamList, 'Splash'>;
-
-const SplashScreen = ({ navigation }: Props) => {
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      navigation.replace('ChooseLanguage'); // replace để không quay lại splash
-    }, 2000);
-
-    return () => clearTimeout(timer);
-  }, [navigation]);
-
+const ChooseLanguageScreen = ({}) => {
   return (
     <TouchableOpacity style={{ flex: 1 }} activeOpacity={1}>
-      <LinearGradient
-        colors={['#FFF8F1', '#FFFFFF', '#FBC9A9']}
-        style={styles.container}
-      >
+      <View style={styles.container}>
         {/* Logo */}
         <Image
           source={LOGO.logoPrimary} // logo Fittory
@@ -45,13 +28,11 @@ const SplashScreen = ({ navigation }: Props) => {
         {/* Loading icon */}
         <ICONS.loading width={24} height={24} fill='#00f' />
         {/* Slogan */}
-        <Text style={styles.slogan}>
-          Effortless shopping. Your style{'\n'}your way.
-        </Text>
+        <Text style={styles.slogan}>Hello world from Choose Language</Text>
 
         {/* Tap anywhere */}
         <Text style={styles.tapText}>{'<<<Tap anywhere to proceed >> >'}</Text>
-      </LinearGradient>
+      </View>
     </TouchableOpacity>
   );
 };
@@ -61,6 +42,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'flex-start',
     alignItems: 'center',
+    backgroundColor: COLORS.background,
   },
   logo: {
     width: screenWidth,
@@ -83,4 +65,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SplashScreen;
+export default ChooseLanguageScreen;
