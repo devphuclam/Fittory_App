@@ -1,5 +1,5 @@
 // src/screens/SplashScreen.tsx
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -11,10 +11,24 @@ import {
 import { LOGO } from '../../assets/images/logo';
 import { ICONS } from '../../assets/images/icons';
 import { COLORS } from '../../constants/color';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigations/AppNavigator';
+import LanguageButton from './components/LanguageButton';
+import ConfirmButton from '../../components/ConfirmButton/ConfirmButton';
+import SplashScreen from '../onboarding/SplashScreen';
 
 const { width: screenWidth } = Dimensions.get('window');
+type Props = NativeStackScreenProps<RootStackParamList, 'ChooseLanguage'>;
 
-const ChooseLanguageScreen = ({}) => {
+const languages = [
+  { code: 'en', label: 'English' },
+  { code: 'vi', label: 'Tiếng Việt' },
+  { code: 'ja', label: '日本語' },
+  { code: 'zh', label: '中国人' },
+];
+
+const ChooseLanguageScreen = ({ navigation }: Props) => {
+  const [selectedLang, setSelectedLang] = useState('en');
   return (
     <TouchableOpacity style={{ flex: 1 }} activeOpacity={1}>
       <View style={styles.container}>
@@ -25,13 +39,30 @@ const ChooseLanguageScreen = ({}) => {
           resizeMode='contain'
         />
 
-        {/* Loading icon */}
-        <ICONS.loading width={24} height={24} fill='#00f' />
         {/* Slogan */}
-        <Text style={styles.slogan}>Hello world from Choose Language</Text>
+        <Text style={styles.slogan}>Choose Your Language</Text>
 
-        {/* Tap anywhere */}
-        <Text style={styles.tapText}>{'<<<Tap anywhere to proceed >> >'}</Text>
+        {/* Language Button */}
+        {languages.map((lang) => (
+          <LanguageButton
+            key={lang.code}
+            label={lang.label}
+            isSelected={selectedLang === lang.code}
+            onPress={() => setSelectedLang(lang.code)}
+          />
+        ))}
+
+        {/* Confirm Button */}
+        <View style={styles.confirmBtnContainer}>
+          <ConfirmButton label='Cancel' isDisable={true} />
+          <ConfirmButton
+            label='Apply'
+            onPress={() => {
+              console.log('Selected: ', selectedLang);
+              navigation.navigate('Splash');
+            }}
+          />
+        </View>
       </View>
     </TouchableOpacity>
   );
@@ -51,17 +82,17 @@ const styles = StyleSheet.create({
   },
   slogan: {
     textAlign: 'center',
-    color: '#FF8C00',
-    fontSize: 16,
+    color: COLORS.specialText,
+    fontSize: 24,
     fontWeight: 'bold',
-    marginTop: 10,
+    marginBottom: 20,
   },
-  tapText: {
-    position: 'absolute',
-    bottom: 100,
-    color: 'red',
-    fontSize: 14,
-    fontWeight: 'bold',
+  confirmBtnContainer: {
+    display: 'flex',
+    width: screenWidth,
+    marginTop: 12,
+    flexDirection: 'row',
+    justifyContent: 'space-around',
   },
 });
 

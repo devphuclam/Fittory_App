@@ -14,6 +14,9 @@ export const COLORS = {
   error: '#EF4444',
   warning: '#FBBF24',
   info: '#2196F3',
+  disable: '#A0A0A0',
+  // Effect Color
+  defaultShadow: 'rgba(0, 0, 0)',
 } as const;
 
 // Nếu bạn dùng TypeScript thì sẽ có type gợi ý khi import
