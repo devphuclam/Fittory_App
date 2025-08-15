@@ -27,7 +27,7 @@ const InputWithIcon = (props: InputWithIconProps) => {
     >
       {/* Icon */}
       <View style={styles.iconContainer}>
-        {Icon && <Icon width={21} height={21} />}
+        {Icon && <Icon width={21} height={21} color={COLORS.iconColor} />}
       </View>
       {/* Line */}
       {/* Text */}
