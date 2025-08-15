@@ -9,13 +9,11 @@ import {
   Dimensions,
 } from 'react-native';
 import { LOGO } from '../../assets/images/logo';
-import { ICONS } from '../../assets/images/icons';
 import { COLORS } from '../../constants/color';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigations/AppNavigator';
 import LanguageButton from './components/LanguageButton';
 import ConfirmButton from '../../components/ConfirmButton/ConfirmButton';
-import SplashScreen from '../onboarding/SplashScreen';
 
 const { width: screenWidth } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'ChooseLanguage'>;
@@ -30,41 +28,39 @@ const languages = [
 const ChooseLanguageScreen = ({ navigation }: Props) => {
   const [selectedLang, setSelectedLang] = useState('en');
   return (
-    <TouchableOpacity style={{ flex: 1 }} activeOpacity={1}>
-      <View style={styles.container}>
-        {/* Logo */}
-        <Image
-          source={LOGO.logoPrimary} // logo Fittory
-          style={styles.logo}
-          resizeMode='contain'
+    <View style={styles.container}>
+      {/* Logo */}
+      <Image
+        source={LOGO.logoPrimary} // logo Fittory
+        style={styles.logo}
+        resizeMode='contain'
+      />
+
+      {/* Slogan */}
+      <Text style={styles.slogan}>Choose Your Language</Text>
+
+      {/* Language Button */}
+      {languages.map((lang) => (
+        <LanguageButton
+          key={lang.code}
+          label={lang.label}
+          isSelected={selectedLang === lang.code}
+          onPress={() => setSelectedLang(lang.code)}
         />
+      ))}
 
-        {/* Slogan */}
-        <Text style={styles.slogan}>Choose Your Language</Text>
-
-        {/* Language Button */}
-        {languages.map((lang) => (
-          <LanguageButton
-            key={lang.code}
-            label={lang.label}
-            isSelected={selectedLang === lang.code}
-            onPress={() => setSelectedLang(lang.code)}
-          />
-        ))}
-
-        {/* Confirm Button */}
-        <View style={styles.confirmBtnContainer}>
-          <ConfirmButton label='Cancel' isDisable={true} />
-          <ConfirmButton
-            label='Apply'
-            onPress={() => {
-              console.log('Selected: ', selectedLang);
-              navigation.navigate('Splash');
-            }}
-          />
-        </View>
+      {/* Confirm Button */}
+      <View style={styles.confirmBtnContainer}>
+        <ConfirmButton label='Cancel' isDisable={true} />
+        <ConfirmButton
+          label='Apply'
+          onPress={() => {
+            console.log('Selected: ', selectedLang);
+            navigation.navigate('SignIn');
+          }}
+        />
       </View>
-    </TouchableOpacity>
+    </View>
   );
 };
 

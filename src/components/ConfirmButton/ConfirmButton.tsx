@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     elevation: 4, // Android shadow
-    shadowColor: COLORS.defaultShadow, // iOS shadow
+    shadowColor: COLORS.black, // iOS shadow
     shadowOffset: { width: 4, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
