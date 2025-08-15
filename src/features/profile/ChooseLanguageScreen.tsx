@@ -1,4 +1,3 @@
-// src/screens/SplashScreen.tsx
 import React, { useState } from 'react';
 import {
   View,
