@@ -1,23 +1,18 @@
 import React from 'react';
-import {
-  StyleSheet,
-  View,
-  Image,
-  Text,
-  Dimensions,
-  Pressable,
-  Animated,
-} from 'react-native';
+import { StyleSheet, View, Image, Text, Dimensions } from 'react-native';
 import { LOGO } from '../../assets/images/logo';
 import { COLORS } from '../../constants/color';
 import { ICONS } from '../../assets/images/icons';
 import ConfirmButton from '../../components/ConfirmButton/ConfirmButton';
 import InputWithIcon from '../../components/Input/InputWithIcon';
 import AnimatedLink from '../../components/AnimatedLink/AnimatedLink';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigations/AppNavigator';
 
 const { width: screenWidth } = Dimensions.get('window');
+type Props = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
-const SignInScreen = () => {
+const SignInScreen = ({ navigation }: Props) => {
   return (
     <View style={styles.container}>
       {/* Logo */}
@@ -52,7 +47,11 @@ const SignInScreen = () => {
         {/* Proceed to Sign Up */}
         <View style={[{ alignItems: 'center' }]}>
           <Text style={styles.normalText}>Don't have an account ?</Text>
-          <AnimatedLink label='Sign Up' textStyle={styles.linkText} />
+          <AnimatedLink
+            label='Sign Up'
+            textStyle={styles.linkText}
+            onPress={() => navigation.navigate('SignUp')}
+          />
         </View>
       </View>
     </View>
