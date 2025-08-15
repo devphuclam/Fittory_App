@@ -5,6 +5,8 @@ import Email from './email.svg';
 import PadLock from './padlock.svg';
 import Google from './google.svg';
 import Facebook from './faceboook.svg';
+import Search from './search.svg';
+import Alarm from './alarm.svg';
 
 export const ICONS = {
   loading: LoadingIcon,
@@ -14,4 +16,6 @@ export const ICONS = {
   access: Access,
   google: Google,
   facebook: Facebook,
+  search: Search,
+  alarm: Alarm,
 };
