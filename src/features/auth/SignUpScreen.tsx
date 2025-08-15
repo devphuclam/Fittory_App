@@ -40,11 +40,12 @@ const SignUpScreen = ({ navigation }: Props) => {
           inputWidth={screenWidth * 0.8}
           inputHeight={40}
         />
-        {/* Sign-In Button */}
+        {/* Sign-Up Button */}
         <ConfirmButton
           label='Sign Up'
           buttonWidth={screenWidth * 0.8}
           buttonHeight={46}
+          onPress={() => navigation.navigate('Home')}
         />
       </View>
       <View style={styles.belowMainContent}>
@@ -67,6 +68,7 @@ const SignUpScreen = ({ navigation }: Props) => {
             icon={ICONS.google}
             textStyle={styles.linkText}
           />
+          {/* Proceed to Sign Up with Facebook */}
           <LinkWithIcon
             label='Sign up with Facebook'
             icon={ICONS.facebook}

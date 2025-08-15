@@ -39,6 +39,7 @@ const SignInScreen = ({ navigation }: Props) => {
           label='Sign In'
           buttonWidth={screenWidth * 0.8}
           buttonHeight={46}
+          onPress={() => navigation.navigate('Home')}
         />
       </View>
       <View style={styles.belowMainContent}>

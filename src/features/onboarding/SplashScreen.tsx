@@ -43,7 +43,7 @@ const SplashScreen = ({ navigation }: Props) => {
         />
 
         {/* Loading icon */}
-        <ICONS.loading width={24} height={24} fill='#00f' />
+        <ICONS.loading width={24} height={24} color={COLORS.iconColor} />
         {/* Slogan */}
         <Text style={styles.slogan}>
           Effortless shopping. Your style{'\n'}your way.

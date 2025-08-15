@@ -9,6 +9,7 @@ import ProfileScreen from '../features/profile/ProfileScreen';
 
 import SignInScreen from '../features/auth/SignInScreen';
 import SignUpScreen from '../features/auth/SignUpScreen';
+import HomeScreen from '../features/home/HomeScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -16,6 +17,7 @@ export type RootStackParamList = {
   Profile: undefined;
   SignIn: undefined;
   SignUp: undefined;
+  Home: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -29,6 +31,7 @@ export default function AppNavigator() {
         <Stack.Screen name='Profile' component={ProfileScreen} />
         <Stack.Screen name='SignIn' component={SignInScreen} />
         <Stack.Screen name='SignUp' component={SignUpScreen} />
+        <Stack.Screen name='Home' component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
