@@ -51,6 +51,14 @@ const ProfileScreen = ({ navigation }: Props) => {
                         resizeMode='cover'
                     />
                 </TouchableOpacity>
+                {/* User Name Section */}
+                <View style={styles.userNameContainer}>
+                    <Text style={styles.userName} >Nguyen Huynh Phuc Thinh</Text>
+                </View>
+                {/* User Email Address Section */}
+                <View style={styles.userEmailAddressContainer}>
+                    <Text style={styles.userEmailAddress}>Customer@example.com</Text>
+                </View>
             </View>
         </ScrollView >
     )
@@ -72,11 +80,32 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: COLORS.defaultShadow,
-        shadowOffset: { width: 0, height: 4 },
+        shadowColor: COLORS.black,
+        shadowOffset: { width: 10, height: 10 },
         shadowOpacity: 0.3,
-        shadowRadius: 4,
-        elevation: 5,
+        shadowRadius: 10,
+        elevation: 10,
+    },
+    userNameContainer: {
+        marginTop: '5%',
+    },
+    userName: {
+        color: COLORS.specialText,
+        fontSize: 20,
+        fontWeight: 'semibold',
+        shadowColor: COLORS.black,
+        textShadowOffset: { width: 0, height: 2 },
+        textShadowRadius: 4,
+        elevation: 4,
+        shadowOpacity: 0.3,
+    },
+    userEmailAddressContainer: {
+        marginTop: '5%',
+    },
+    userEmailAddress: {
+        color: COLORS.linkText,
+        fontSize: 16,
+        fontWeight: 'regular'
     }
 });
 
