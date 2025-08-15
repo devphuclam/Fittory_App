@@ -8,6 +8,9 @@ export const COLORS = {
   activeBlue: '#0B6CF9',
   linkText: '#2994D4',
   red: '#FF0000',
+  black: 'rgba(0, 0, 0, 1)',
+  white: '#ffffff',
+  placeholderOrange: 'rgba(249, 140, 11, 0.5)',
 
   // Trạng thái
   success: '#4ADE80',
@@ -16,7 +19,8 @@ export const COLORS = {
   info: '#2196F3',
   disable: '#A0A0A0',
   // Effect Color
-  defaultShadow: 'rgba(0, 0, 0)',
+  defaultShadow: 'rgba(0, 0, 0, 0.25)',
+  orangeShadow: 'rgba(244,162,97, 0.25)',
 } as const;
 
 // Nếu bạn dùng TypeScript thì sẽ có type gợi ý khi import

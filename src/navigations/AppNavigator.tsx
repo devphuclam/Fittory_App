@@ -5,10 +5,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import SplashScreen from '../features/onboarding/SplashScreen';
 import ChooseLanguageScreen from '../features/profile/ChooseLanguageScreen';
+import SignInScreen from '../features/auth/SignInScreen';
+import SignUpScreen from '../features/auth/SignUpScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
   ChooseLanguage: undefined;
+  SignIn: undefined;
+  SignUp: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -19,6 +23,8 @@ export default function AppNavigator() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Splash' component={SplashScreen} />
         <Stack.Screen name='ChooseLanguage' component={ChooseLanguageScreen} />
+        <Stack.Screen name='SignIn' component={SignInScreen} />
+        <Stack.Screen name='SignUp' component={SignUpScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
