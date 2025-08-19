@@ -3,7 +3,6 @@ import { StyleSheet, View, Text, TouchableOpacity, ViewStyle, TextStyle } from "
 import { COLORS } from "../../../constants/color";
 import { ICONS } from "../../../assets/images/icons";
 import { SvgProps } from "react-native-svg";
-
 type ProfileOptionButtonProps = {
     optionName?: string;
     icon?: React.FC<SvgProps>;
@@ -11,6 +10,7 @@ type ProfileOptionButtonProps = {
     style?: ViewStyle;
     textStyle?: TextStyle;
 }
+
 
 const ProfileOptionButton = ({ optionName, icon: Icon, onPress, style, textStyle }: ProfileOptionButtonProps) => {
     return (
@@ -26,7 +26,7 @@ const ProfileOptionButton = ({ optionName, icon: Icon, onPress, style, textStyle
                 </View>
                 {/* Option Next Icon */}
                 <View style={styles.nextIconContainer}>
-                    <ICONS.alarm width={24} height={24} color={COLORS.specialText}></ICONS.alarm>
+                    <ICONS.rightarrow width={24} height={24} color={COLORS.specialText}></ICONS.rightarrow>
                 </View>
             </TouchableOpacity>
         </View>

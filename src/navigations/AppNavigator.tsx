@@ -10,6 +10,7 @@ import ProfileScreen from '../features/profile/ProfileScreen';
 import SignInScreen from '../features/auth/SignInScreen';
 import SignUpScreen from '../features/auth/SignUpScreen';
 import HomeScreen from '../features/home/HomeScreen';
+import MyCartScreen from '../features/cart/MyCartScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -18,6 +19,7 @@ export type RootStackParamList = {
   SignIn: undefined;
   SignUp: undefined;
   Home: undefined;
+  MyCart: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -32,6 +34,7 @@ export default function AppNavigator() {
         <Stack.Screen name='SignIn' component={SignInScreen} />
         <Stack.Screen name='SignUp' component={SignUpScreen} />
         <Stack.Screen name='Home' component={HomeScreen} />
+        <Stack.Screen name='MyCart' component={MyCartScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
