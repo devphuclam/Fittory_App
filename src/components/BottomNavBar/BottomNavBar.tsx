@@ -23,11 +23,11 @@ type BottomNavBarProps = {
 };
 
 const TABS = [
-  { name: 'Support', icon: ICONS.support, route: 'SupportScreen' },
-  { name: 'Order', icon: ICONS.order, route: 'OrderScreen' },
-  { name: 'Home', icon: ICONS.home, route: 'HomeScreen' },
-  { name: 'Cart', icon: ICONS.shoppingbag, route: 'CartScreen' },
-  { name: 'Profile', icon: ICONS.profile, route: 'ProfileScreen' },
+  { name: 'Support', icon: ICONS.support, route: 'Support' },
+  { name: 'Order', icon: ICONS.order, route: 'Order' },
+  { name: 'Home', icon: ICONS.home, route: 'Home' },
+  { name: 'Cart', icon: ICONS.shoppingbag, route: 'Cart' },
+  { name: 'Profile', icon: ICONS.profile, route: 'Profile' },
 ];
 
 const BottomNavBar = ({ activeTab, style, textStyle }: BottomNavBarProps) => {
