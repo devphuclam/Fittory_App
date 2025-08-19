@@ -15,9 +15,16 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigations/AppNavigator';
 import { USER } from '../../assets/images/user';
 import * as ImagePicker from 'expo-image-picker';
+import ProfileOptionButton from './components/ProfileOptionButton';
 
 const { width: screenWidth } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>;
+const profileOptions = [
+    { code: 'setting', optionName: 'Profile Settings', optionIcon: ICONS.profilesetting },
+    { code: 'voucher', optionName: 'My Vouchers', optionIcon: ICONS.voucher },
+    { code: 'security', optionName: 'Security', optionIcon: ICONS.security },
+    { code: 'language', optionName: "Language", optionIcon: ICONS.language },
+]
 
 
 const ProfileScreen = ({ navigation }: Props) => {
@@ -51,6 +58,24 @@ const ProfileScreen = ({ navigation }: Props) => {
                         resizeMode='cover'
                     />
                 </TouchableOpacity>
+                {/* User Name Section */}
+                <View style={styles.userNameContainer}>
+                    <Text style={styles.userName} >Nguyen Huynh Phuc Thinh</Text>
+                </View>
+                {/* User Email Address Section */}
+                <View style={styles.userEmailAddressContainer}>
+                    <Text style={styles.userEmailAddress}>Customer@example.com</Text>
+                </View>
+                {/* Profile Options Section */}
+                <View style={styles.profileOptionButtonContainer}>
+                    {profileOptions.map((option) => (
+                        <ProfileOptionButton
+                            key={option.code}
+                            optionName={option.optionName}
+                            icon={option.optionIcon}
+                        />
+                    ))}
+                </View>
             </View>
         </ScrollView >
     )
@@ -63,21 +88,47 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.background,
     },
     profileImageContainer: {
-        marginTop: '20%',
-        width: screenWidth * 0.5,
-        height: screenWidth * 0.5,
+        marginTop: '30%',
+        width: screenWidth * 0.33,
+        height: screenWidth * 0.33,
         borderColor: COLORS.specialText,
         borderWidth: 2,
         borderRadius: 100,
         overflow: 'hidden',
         alignItems: 'center',
         justifyContent: 'center',
-        shadowColor: COLORS.defaultShadow,
-        shadowOffset: { width: 0, height: 4 },
+        shadowColor: COLORS.black,
+        shadowOffset: { width: 10, height: 10 },
         shadowOpacity: 0.3,
-        shadowRadius: 4,
-        elevation: 5,
-    }
+        shadowRadius: 10,
+        elevation: 10,
+    },
+    userNameContainer: {
+        marginTop: '5%',
+    },
+    userName: {
+        color: COLORS.specialText,
+        fontSize: 20,
+        fontWeight: 'semibold',
+        shadowColor: COLORS.black,
+        textShadowOffset: { width: 0, height: 2 },
+        textShadowRadius: 4,
+        elevation: 4,
+        shadowOpacity: 0.3,
+    },
+    userEmailAddressContainer: {
+        marginTop: '5%',
+    },
+    userEmailAddress: {
+        color: COLORS.linkText,
+        fontSize: 16,
+        fontWeight: 'regular'
+    },
+    profileOptionButtonContainer: {
+        marginTop: '5%',
+        width: screenWidth * 0.8,
+        alignSelf: 'center',
+    },
 });
 
 export default ProfileScreen
