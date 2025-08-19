@@ -12,18 +12,24 @@ import { useState } from 'react';
 import { ICONS } from '../../assets/images/icons';
 import { COLORS } from '../../constants/color';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigations/AppNavigator';
 import { USER } from '../../assets/images/user';
 import * as ImagePicker from 'expo-image-picker';
 import ProfileOptionButton from './components/ProfileOptionButton';
+import BottomNavBar from '../../components/BottomNavBar/BottomNavBar';
+import { useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>;
 const profileOptions = [
-    { code: 'setting', optionName: 'Profile Settings', optionIcon: ICONS.profilesetting },
-    { code: 'voucher', optionName: 'My Vouchers', optionIcon: ICONS.voucher },
-    { code: 'security', optionName: 'Security', optionIcon: ICONS.security },
-    { code: 'language', optionName: "Language", optionIcon: ICONS.language },
+    { code: 'setting', optionName: 'Profile Settings', optionIcon: ICONS.profilesetting, route: '' },
+    { code: 'voucher', optionName: 'My Vouchers', optionIcon: ICONS.voucher, route: '' },
+    { code: 'security', optionName: 'Security', optionIcon: ICONS.security, route: '' },
+    { code: 'language', optionName: "Language", optionIcon: ICONS.language, route: 'ChooseLanguage' },
 ]
 
 
@@ -46,38 +52,45 @@ const ProfileScreen = ({ navigation }: Props) => {
             setProfileImage(result.assets[0].uri);
         }
     }
+    const navigator = useNavigation<NavigationProp>();
 
     return (
-        <ScrollView style={styles.container} >
-            <View style={{ alignItems: 'center', justifyContent: 'flex-start', }}>
-                {/* Profile Image Section */}
-                <TouchableOpacity style={styles.profileImageContainer} onPress={pickImage}>
-                    <Image
-                        source={profileImage ? { uri: profileImage } : USER.userPlaceholderAvatar2} // Placeholder avatar
-                        style={{ width: '100%', height: '100%', borderRadius: 100 }}
-                        resizeMode='cover'
-                    />
-                </TouchableOpacity>
-                {/* User Name Section */}
-                <View style={styles.userNameContainer}>
-                    <Text style={styles.userName} >Nguyen Huynh Phuc Thinh</Text>
-                </View>
-                {/* User Email Address Section */}
-                <View style={styles.userEmailAddressContainer}>
-                    <Text style={styles.userEmailAddress}>Customer@example.com</Text>
-                </View>
-                {/* Profile Options Section */}
-                <View style={styles.profileOptionButtonContainer}>
-                    {profileOptions.map((option) => (
-                        <ProfileOptionButton
-                            key={option.code}
-                            optionName={option.optionName}
-                            icon={option.optionIcon}
+        <View style={styles.container}>
+            <ScrollView contentContainerStyle={styles.scrollContent}
+                showsVerticalScrollIndicator={false}
+            >
+                <View style={{ alignItems: 'center', justifyContent: 'flex-start', }}>
+                    {/* Profile Image Section */}
+                    <TouchableOpacity style={styles.profileImageContainer} onPress={pickImage}>
+                        <Image
+                            source={profileImage ? { uri: profileImage } : USER.userPlaceholderAvatar2} // Placeholder avatar
+                            style={{ width: '100%', height: '100%', borderRadius: 100 }}
+                            resizeMode='cover'
                         />
-                    ))}
+                    </TouchableOpacity>
+                    {/* User Name Section */}
+                    <View style={styles.userNameContainer}>
+                        <Text style={styles.userName} >Nguyen Huynh Phuc Thinh</Text>
+                    </View>
+                    {/* User Email Address Section */}
+                    <View style={styles.userEmailAddressContainer}>
+                        <Text style={styles.userEmailAddress}>Customer@example.com</Text>
+                    </View>
+                    {/* Profile Options Section */}
+                    <View style={styles.profileOptionButtonContainer}>
+                        {profileOptions.map((option) => (
+                            <ProfileOptionButton
+                                key={option.code}
+                                optionName={option.optionName}
+                                icon={option.optionIcon}
+                                onPress={() => { navigator.navigate(option.route as keyof RootStackParamList) }}
+                            />
+                        ))}
+                    </View>
                 </View>
-            </View>
-        </ScrollView >
+            </ScrollView >
+            <BottomNavBar activeTab='Profile' />
+        </View>
     )
 
 }
@@ -86,6 +99,11 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: COLORS.background,
+    },
+    scrollContent: {
+        backgroundColor: COLORS.background,
+        flexGrow: 1,
+        minHeight: Dimensions.get('window').height,
     },
     profileImageContainer: {
         marginTop: '30%',

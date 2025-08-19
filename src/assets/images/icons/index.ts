@@ -16,6 +16,7 @@ import Language from './language.svg';
 import ProfileSetting from './profilesetting.svg';
 import Security from './security.svg';
 import Voucher from './voucher.svg';
+import RightArrow from './rightarrow.svg';
 
 export const ICONS = {
   loading: LoadingIcon,
@@ -36,4 +37,5 @@ export const ICONS = {
   support: Support,
   profile: Profile,
   shoppingbag: ShoppingBag,
+  rightarrow: RightArrow,
 };

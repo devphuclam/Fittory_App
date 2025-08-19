@@ -26,7 +26,7 @@ const TABS = [
   { name: 'Support', icon: ICONS.support, route: 'Support' },
   { name: 'Order', icon: ICONS.order, route: 'Order' },
   { name: 'Home', icon: ICONS.home, route: 'Home' },
-  { name: 'Cart', icon: ICONS.shoppingbag, route: 'Cart' },
+  { name: 'Cart', icon: ICONS.shoppingbag, route: 'MyCart' },
   { name: 'Profile', icon: ICONS.profile, route: 'Profile' },
 ];
 
