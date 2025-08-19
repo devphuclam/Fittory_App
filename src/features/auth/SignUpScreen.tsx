@@ -19,7 +19,7 @@ const SignUpScreen = ({ navigation }: Props) => {
       {/* Logo */}
       <Image source={LOGO.logoPrimary} style={styles.logo} />
       {/* Title */}
-      <Text style={styles.title}>Sign in</Text>
+      <Text style={styles.title}>Sign Up</Text>
       {/* Inputs */}
       <View style={styles.mainContentContainer}>
         <InputWithIcon
