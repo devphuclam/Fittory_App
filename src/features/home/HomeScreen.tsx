@@ -1,17 +1,67 @@
 import React from 'react';
-import { StyleSheet, Dimensions, Text, View, ScrollView } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  Text,
+  View,
+  ScrollView,
+  FlatList,
+} from 'react-native';
 import { RootStackParamList } from '../../navigations/AppNavigator';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { COLORS } from '../../constants/color';
 import Appbar from '../../components/Appbar/Appbar';
 import BottomNavBar from '../../components/BottomNavBar/BottomNavBar';
+import ProductCard from '../../components/ProductCard/ProductCard';
+import BannerCarousel from '../../components/BannerCarousel/BannerCarousel';
 
-const { width: screenWidth } = Dimensions.get('window');
+const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
+
+// sample products
+const sampleProducts = [
+  {
+    id: '1',
+    name: 'Wireless Headphones',
+    price: 59.99,
+    image: 'https://picsum.photos/400/400?random=1',
+  },
+  {
+    id: '2',
+    name: 'Smart Watch',
+    price: 120.0,
+    image: 'https://picsum.photos/400/400?random=2',
+  },
+  {
+    id: '3',
+    name: 'Bluetooth Speaker',
+    price: 75.5,
+    image: 'https://picsum.photos/400/400?random=3',
+  },
+  {
+    id: '4',
+    name: 'Gaming Mouse',
+    price: 40.0,
+    image: 'https://picsum.photos/400/400?random=4',
+  },
+  {
+    id: '5',
+    name: 'Mechanical Keyboard',
+    price: 99.0,
+    image: 'https://picsum.photos/400/400?random=5',
+  },
+];
+
+// Tính chiều cao section dựa vào ProductCard (đảm bảo khớp với ProductCard)
+const CARD_WIDTH = screenWidth * 0.4;
+const CARD_IMAGE_HEIGHT = CARD_WIDTH * 0.6;
+const CARD_TOTAL_HEIGHT = CARD_IMAGE_HEIGHT + 16 + 48 + 24 + 40; // (image + paddings + title area + price + button)
+const SECTION_VERTICAL_PADDING = 50;
+const SECTION_HEIGHT = Math.round(CARD_TOTAL_HEIGHT + SECTION_VERTICAL_PADDING); // pixel height cho section
 
 const HomeScreen = ({ navigation }: Props) => {
   return (
-    <View style={styles.conainter}>
+    <View style={styles.container}>
       <ScrollView
         contentContainerStyle={styles.scrollContent}
         showsVerticalScrollIndicator={false}
@@ -20,6 +70,98 @@ const HomeScreen = ({ navigation }: Props) => {
           label='Home'
           style={{ width: '80%', marginTop: '10%', alignSelf: 'center' }}
         />
+        {/* Banner Section */}
+        {/* banner */}
+        <BannerCarousel
+          banners={[
+            { id: 'a', image: 'https://picsum.photos/1000/600?random=11' },
+            { id: 'b', image: 'https://picsum.photos/1000/600?random=12' },
+            { id: 'c', image: 'https://picsum.photos/1000/600?random=13' },
+          ]}
+          autoplay
+          autoplayInterval={4500}
+          onPressBanner={(b) => console.log('Pressed banner', b.id)}
+        />
+        {/* -- Section 1: Perfect Deals -- */}
+        <View style={styles.group}>
+          <Text style={[styles.textSection, { marginLeft: 20 }]}>
+            Perfect Deals
+          </Text>
+
+          <View
+            style={[styles.scrollSectionContainer, { height: SECTION_HEIGHT }]}
+          >
+            <FlatList
+              data={sampleProducts}
+              horizontal
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <ProductCard
+                  productName={item.name}
+                  productPrice={item.price}
+                  productImage={{ uri: item.image }}
+                />
+              )}
+              contentContainerStyle={styles.listContent}
+              showsHorizontalScrollIndicator={false}
+              nestedScrollEnabled={true}
+            />
+          </View>
+        </View>
+
+        {/* -- Section 2: Latest Drops (copyable safe) -- */}
+        <View style={styles.group}>
+          <Text style={[styles.textSection, { marginLeft: 20 }]}>
+            Latest Drops
+          </Text>
+
+          <View
+            style={[styles.scrollSectionContainer, { height: SECTION_HEIGHT }]}
+          >
+            <FlatList
+              data={sampleProducts.slice().reverse()} // ví dụ khác nội dung
+              horizontal
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <ProductCard
+                  productName={item.name}
+                  productPrice={item.price}
+                  productImage={{ uri: item.image }}
+                />
+              )}
+              contentContainerStyle={styles.listContent}
+              showsHorizontalScrollIndicator={false}
+              nestedScrollEnabled={true}
+            />
+          </View>
+        </View>
+
+        {/* -- Section 3: Weekly Picks (copyable safe) -- */}
+        <View style={styles.group}>
+          <Text style={[styles.textSection, { marginLeft: 20 }]}>
+            Weekly Picks
+          </Text>
+
+          <View
+            style={[styles.scrollSectionContainer, { height: SECTION_HEIGHT }]}
+          >
+            <FlatList
+              data={sampleProducts.slice().reverse()} // ví dụ khác nội dung
+              horizontal
+              keyExtractor={(item) => item.id}
+              renderItem={({ item }) => (
+                <ProductCard
+                  productName={item.name}
+                  productPrice={item.price}
+                  productImage={{ uri: item.image }}
+                />
+              )}
+              contentContainerStyle={styles.listContent}
+              showsHorizontalScrollIndicator={false}
+              nestedScrollEnabled={true}
+            />
+          </View>
+        </View>
       </ScrollView>
 
       <BottomNavBar activeTab='Home' />
@@ -28,14 +170,37 @@ const HomeScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
-  scrollContent: {
-    backgroundColor: COLORS.background,
-    flexGrow: 1,
-    minHeight: Dimensions.get('window').height,
-  },
-  conainter: {
+  container: {
     backgroundColor: COLORS.background,
     flex: 1,
+  },
+  scrollContent: {
+    backgroundColor: COLORS.background,
+    paddingBottom: 40,
+  },
+  group: {
+    marginTop: 24,
+    alignSelf: 'center',
+    width: '85%',
+  },
+  textSection: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    color: COLORS.lightBlack,
+  },
+  scrollSectionContainer: {
+    backgroundColor: COLORS.section,
+    overflow: 'hidden',
+    marginTop: 12,
+    width: '100%',
+    borderWidth: 1,
+    borderColor: COLORS.defaultShadow,
+    borderRadius: 20,
+  },
+  listContent: {
+    paddingHorizontal: 12,
+    paddingVertical: 10,
+    alignItems: 'center', // căn giữa card theo trục dọc
   },
 });
 

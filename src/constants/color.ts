@@ -8,8 +8,10 @@ export const COLORS = {
   activeBlue: '#0B6CF9',
   linkText: '#2994D4',
   red: '#FF0000',
+  lightBlack: 'rgba(51, 51, 51, 0.8)',
   black: 'rgba(0, 0, 0, 1)',
   white: '#ffffff',
+  transparentWhite: 'rgba(249,249,249, 0.5)',
   placeholderOrange: 'rgba(249, 140, 11, 0.5)',
   bottomNavBar: 'rgba(11, 108, 249, 0.6)',
 
