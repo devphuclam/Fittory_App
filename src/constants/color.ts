@@ -11,6 +11,7 @@ export const COLORS = {
   black: 'rgba(0, 0, 0, 1)',
   white: '#ffffff',
   placeholderOrange: 'rgba(249, 140, 11, 0.5)',
+  bottomNavBar: 'rgba(11, 108, 249, 0.6)',
 
   // Trạng thái
   success: '#4ADE80',
@@ -21,6 +22,7 @@ export const COLORS = {
   // Effect Color
   defaultShadow: 'rgba(0, 0, 0, 0.25)',
   orangeShadow: 'rgba(244,162,97, 0.25)',
+  darkShadow: 'rgba(0, 0, 0, 0.5)',
 } as const;
 
 // Nếu bạn dùng TypeScript thì sẽ có type gợi ý khi import

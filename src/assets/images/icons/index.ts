@@ -11,6 +11,11 @@ import Language from './language.svg';
 import ProfileSetting from './profilesetting.svg';
 import Security from './security.svg';
 import Voucher from './voucher.svg';
+import Home from './home.svg';
+import Order from './order.svg';
+import Profile from './profile.svg';
+import ShoppingBag from './shoppingbag.svg';
+import Support from './support.svg';
 
 export const ICONS = {
   loading: LoadingIcon,
@@ -26,4 +31,9 @@ export const ICONS = {
   profilesetting: ProfileSetting,
   security: Security,
   voucher: Voucher,
+  home: Home,
+  order: Order,
+  support: Support,
+  profile: Profile,
+  shoppingbag: ShoppingBag,
 };
