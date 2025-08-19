@@ -23,7 +23,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Splash'>;
 const SplashScreen = ({ navigation }: Props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigation.replace('Profile'); // replace để không quay lại splash
+      navigation.replace('ChooseLanguage'); // replace để không quay lại splash
     }, 2000);
 
     return () => clearTimeout(timer);
