@@ -51,7 +51,9 @@ const BottomNavBar = ({ activeTab, style, textStyle }: BottomNavBarProps) => {
             key={tab.name}
             style={styles.tab}
             onPress={() => {
-              navigation.navigate(tab.route as keyof RootStackParamList);
+              navigation.navigate(
+                tab.route as Exclude<keyof RootStackParamList, 'ProductDetail'>
+              );
             }}
           >
             <View
