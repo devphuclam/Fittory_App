@@ -25,7 +25,6 @@ const CartItemData = [
 
 const MyCartScreen = ({ navigation }: Props) => {
     let count = CartItemData.length;
-    const [checkboxState, setCheckboxState] = useState(true);
     return (
         <View style={styles.container}>
             <ScrollView contentContainerStyle={styles.scrollContent}
