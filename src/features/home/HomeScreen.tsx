@@ -14,43 +14,13 @@ import Appbar from '../../components/Appbar/Appbar';
 import BottomNavBar from '../../components/BottomNavBar/BottomNavBar';
 import ProductCard from '../../components/ProductCard/ProductCard';
 import BannerCarousel from '../../components/BannerCarousel/BannerCarousel';
+import { sampleProducts } from '../../data/sampleProducts';
+import { ImageSourcePropType } from 'react-native';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 // sample products
-const sampleProducts = [
-  {
-    id: '1',
-    name: 'Wireless Headphones',
-    price: 59.99,
-    image: 'https://picsum.photos/400/400?random=1',
-  },
-  {
-    id: '2',
-    name: 'Smart Watch',
-    price: 120.0,
-    image: 'https://picsum.photos/400/400?random=2',
-  },
-  {
-    id: '3',
-    name: 'Bluetooth Speaker',
-    price: 75.5,
-    image: 'https://picsum.photos/400/400?random=3',
-  },
-  {
-    id: '4',
-    name: 'Gaming Mouse',
-    price: 40.0,
-    image: 'https://picsum.photos/400/400?random=4',
-  },
-  {
-    id: '5',
-    name: 'Mechanical Keyboard',
-    price: 99.0,
-    image: 'https://picsum.photos/400/400?random=5',
-  },
-];
 
 // Tính chiều cao section dựa vào ProductCard (đảm bảo khớp với ProductCard)
 const CARD_WIDTH = screenWidth * 0.4;
@@ -95,13 +65,20 @@ const HomeScreen = ({ navigation }: Props) => {
               data={sampleProducts}
               horizontal
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <ProductCard
-                  productName={item.name}
-                  productPrice={item.price}
-                  productImage={{ uri: item.image }}
-                />
-              )}
+              renderItem={({ item }) => {
+                const imageSource: ImageSourcePropType =
+                  typeof item.images[1] === 'string'
+                    ? { uri: item.images[1] }
+                    : (item.images[1] as ImageSourcePropType);
+                return (
+                  <ProductCard
+                    productName={item.name}
+                    productPrice={item.price}
+                    productImage={imageSource}
+                    productId={item.id}
+                  />
+                );
+              }}
               contentContainerStyle={styles.listContent}
               showsHorizontalScrollIndicator={false}
               nestedScrollEnabled={true}
@@ -122,13 +99,20 @@ const HomeScreen = ({ navigation }: Props) => {
               data={sampleProducts.slice().reverse()} // ví dụ khác nội dung
               horizontal
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <ProductCard
-                  productName={item.name}
-                  productPrice={item.price}
-                  productImage={{ uri: item.image }}
-                />
-              )}
+              renderItem={({ item }) => {
+                const imageSource: ImageSourcePropType =
+                  typeof item.images[1] === 'string'
+                    ? { uri: item.images[1] }
+                    : (item.images[1] as ImageSourcePropType);
+                return (
+                  <ProductCard
+                    productName={item.name}
+                    productPrice={item.price}
+                    productImage={imageSource}
+                    productId={item.id}
+                  />
+                );
+              }}
               contentContainerStyle={styles.listContent}
               showsHorizontalScrollIndicator={false}
               nestedScrollEnabled={true}
@@ -149,13 +133,20 @@ const HomeScreen = ({ navigation }: Props) => {
               data={sampleProducts.slice().reverse()} // ví dụ khác nội dung
               horizontal
               keyExtractor={(item) => item.id}
-              renderItem={({ item }) => (
-                <ProductCard
-                  productName={item.name}
-                  productPrice={item.price}
-                  productImage={{ uri: item.image }}
-                />
-              )}
+              renderItem={({ item }) => {
+                const imageSource: ImageSourcePropType =
+                  typeof item.images[1] === 'string'
+                    ? { uri: item.images[1] }
+                    : (item.images[1] as ImageSourcePropType);
+                return (
+                  <ProductCard
+                    productName={item.name}
+                    productPrice={item.price}
+                    productImage={imageSource}
+                    productId={item.id}
+                  />
+                );
+              }}
               contentContainerStyle={styles.listContent}
               showsHorizontalScrollIndicator={false}
               nestedScrollEnabled={true}

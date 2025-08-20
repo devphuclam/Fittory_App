@@ -11,10 +11,14 @@ import {
 import { COLORS } from '../../constants/color';
 import { IMAGES } from '../../assets/images';
 import RegularButton from '../RegularButton/RegularButton';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigations/AppNavigator';
+import { useNavigation } from '@react-navigation/native';
 
 const { width: screenWidth } = Dimensions.get('window');
 
-// Tùy chỉnh: card width và height chuẩn
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
+
 const CARD_WIDTH = screenWidth * 0.4;
 const IMAGE_HEIGHT = CARD_WIDTH * 0.6;
 const CARD_HEIGHT =
@@ -26,22 +30,36 @@ const CARD_HEIGHT =
 
 type ProductCardProps = {
   onPress?: () => void;
+  productId: string; // ← thêm productId
   productName?: string;
   productPrice?: number;
   productImage?: ImageSourcePropType;
 };
 
 const ProductCard = ({
+  productId,
   productName = 'No name',
   productPrice = 0,
   productImage,
-  onPress,
 }: ProductCardProps) => {
+  const navigation = useNavigation<NavigationProp>();
+
+  // default hành vi: đi tới ProductDetail với productId
+  const goToDetail = () => {
+    // if (!productId) {
+    //   console.warn(
+    //     'ProductCard: missing productId, cannot navigate to ProductDetail'
+    //   );
+    //   return;
+    // }
+    navigation.navigate('ProductDetail', { productId: productId });
+  };
+
   return (
     <TouchableOpacity
       style={styles.container}
-      onPress={onPress}
-      activeOpacity={0.5}
+      onPress={goToDetail} // bấm vào card cũng navigate
+      activeOpacity={0.8}
     >
       <Image
         style={styles.image}
@@ -49,7 +67,6 @@ const ProductCard = ({
         resizeMode='cover'
       />
 
-      {/* Title area: fixed minHeight để giữ chỗ */}
       <View style={styles.titleWrapper}>
         <Text style={styles.productName} numberOfLines={2} ellipsizeMode='tail'>
           {productName}
@@ -62,6 +79,7 @@ const ProductCard = ({
         label='Details'
         buttonWidth={screenWidth * 0.3}
         buttonHeight={screenWidth * 0.3 * 0.25}
+        onPress={goToDetail} // nút Details cũng navigate mặc định
       />
     </TouchableOpacity>
   );
@@ -76,9 +94,9 @@ const styles = StyleSheet.create({
     width: CARD_WIDTH,
     height: CARD_HEIGHT,
     padding: 10,
-    justifyContent: 'space-between', // giữ các phần đều khoảng
+    justifyContent: 'space-between',
     alignItems: 'center',
-    marginRight: 12, // khoảng cách giữa các card
+    marginRight: 12,
   },
   image: {
     width: '100%',
@@ -87,7 +105,6 @@ const styles = StyleSheet.create({
     marginBottom: 8,
   },
   titleWrapper: {
-    // đảm bảo vùng title luôn chiếm chỗ (ghi 2 dòng)
     minHeight: 44,
     justifyContent: 'center',
   },
