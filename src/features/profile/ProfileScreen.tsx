@@ -83,7 +83,7 @@ const ProfileScreen = ({ navigation }: Props) => {
                                 key={option.code}
                                 optionName={option.optionName}
                                 icon={option.optionIcon}
-                                onPress={() => { navigator.navigate(option.route as keyof RootStackParamList) }}
+                                onPress={() => { navigator.navigate(option.route as Exclude<keyof RootStackParamList, 'ProductDetail'>) }}
                             />
                         ))}
                     </View>

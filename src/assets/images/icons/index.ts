@@ -17,6 +17,9 @@ import ProfileSetting from './profilesetting.svg';
 import Security from './security.svg';
 import Voucher from './voucher.svg';
 import RightArrow from './rightarrow.svg';
+import CheckedBox from './checkedbox.svg';
+import RemoveCartItem from './removecartitem.svg';
+import UncheckedBox from './uncheckedbox.svg';
 
 export const ICONS = {
   loading: LoadingIcon,
@@ -38,4 +41,7 @@ export const ICONS = {
   profile: Profile,
   shoppingbag: ShoppingBag,
   rightarrow: RightArrow,
+  checkedbox: CheckedBox,
+  uncheckedbox: UncheckedBox,
+  removecartitem: RemoveCartItem,
 };
