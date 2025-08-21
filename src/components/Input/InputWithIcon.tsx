@@ -20,10 +20,10 @@ type InputWithIconProps = {
 };
 
 const InputWithIcon = (props: InputWithIconProps) => {
-  const { placeholder, inputWidth = 300, inputHeight = 50, icon: Icon } = props;
+  const { placeholder, inputWidth = 300, inputHeight = 50, icon: Icon, containerStyles, inputStyles } = props;
   return (
     <View
-      style={[styles.container, { width: inputWidth, height: inputHeight }]}
+      style={[styles.container, { width: inputWidth, height: inputHeight }, containerStyles]}
     >
       {/* Icon */}
       <View style={styles.iconContainer}>
@@ -32,7 +32,7 @@ const InputWithIcon = (props: InputWithIconProps) => {
       {/* Line */}
       {/* Text */}
       <TextInput
-        style={styles.input}
+        style={[styles.input, inputStyles]}
         placeholder={placeholder}
         placeholderTextColor={COLORS.placeholderOrange}
       ></TextInput>
