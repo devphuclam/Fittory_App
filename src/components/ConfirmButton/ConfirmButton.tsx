@@ -7,6 +7,7 @@ type ConfirmButtonProps = {
   buttonHeight?: number;
   label: string;
   isDisable?: boolean;
+  isPressable?: boolean;
   onPress?: () => void;
 };
 
@@ -16,6 +17,7 @@ const ConfirmButton = (props: ConfirmButtonProps) => {
     buttonHeight = 40,
     label,
     isDisable = false,
+    isPressable = false,
     onPress,
   } = props;
   return (
@@ -25,8 +27,8 @@ const ConfirmButton = (props: ConfirmButtonProps) => {
         { width: buttonWidth, height: buttonHeight },
         isDisable && styles.disabledButton,
       ]}
-      disabled={isDisable}
       onPress={onPress}
+      disabled={isDisable && !isPressable}
     >
       <Text style={[styles.text, isDisable && styles.disableText]}>
         {label}
