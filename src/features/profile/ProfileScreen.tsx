@@ -106,9 +106,9 @@ const styles = StyleSheet.create({
         minHeight: Dimensions.get('window').height,
     },
     profileImageContainer: {
-        marginTop: '30%',
-        width: screenWidth * 0.33,
-        height: screenWidth * 0.33,
+        marginTop: '20%',
+        width: screenWidth * 0.4,
+        height: screenWidth * 0.4,
         borderColor: COLORS.specialText,
         borderWidth: 2,
         borderRadius: 100,
