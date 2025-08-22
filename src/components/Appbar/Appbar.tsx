@@ -44,13 +44,13 @@ const Appbar = ({
     if (onBackPress) return onBackPress(e);
     navigation.canGoBack()
       ? navigation.goBack()
-      : navigation.navigate('SignIn');
+      : navigation.navigate('Search');
   };
 
   const handleSearch = (e?: GestureResponderEvent) => {
     if (onSearchPress) return onSearchPress(e);
     // default behaviour (you can change to your actual Search screen)
-    navigation.navigate('SignIn');
+    navigation.navigate('Search');
   };
 
   const handleNotify = (e?: GestureResponderEvent) => {
