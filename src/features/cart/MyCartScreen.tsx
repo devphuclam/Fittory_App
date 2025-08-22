@@ -125,7 +125,6 @@ const MyCartScreen = ({ navigation }: Props) => {
                 </View>
                 <RegularButton label="Proceed to Checkout" buttonWidth={screenWidth} />
             </ScrollView>
-
             <BottomNavBar activeTab="Cart" />
         </View>
     )
