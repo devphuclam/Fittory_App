@@ -40,6 +40,8 @@ export default function AppNavigator() {
         <Stack.Screen name='Home' component={HomeScreen} />
         <Stack.Screen name='MyCart' component={MyCartScreen} />
         <Stack.Screen name='ProductDetail' component={ProductDetailScreen} />
+        <Stack.Screen name='Checkout' component={CheckoutScreen} />
+        <Stack.Screen name='Search' component={SearchScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
