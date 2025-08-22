@@ -53,6 +53,9 @@ const MyCartScreen = ({ navigation }: Props) => {
             }
         });
     };
+    const handleCheckoutButtonPressed = () => {
+        navigation.navigate('Checkout');
+    };
     useEffect(() => {
         console.log(`so luong san pham da tick`, checkedItemState.length)
         let totalPrice = 0
@@ -124,7 +127,7 @@ const MyCartScreen = ({ navigation }: Props) => {
                             <Text style={{ fontSize: 20, fontWeight: 'bold', color: COLORS.success, textDecorationLine: 'underline', }}>{lastPriceState} $</Text>
                         </View>
                     </View>
-                    <RegularButtonWithIcon label=" Proceed to Checkout" icon={ICONS.shoppingbag} />
+                    <RegularButtonWithIcon label=" Proceed to Checkout" icon={ICONS.shoppingbag} onPress={handleCheckoutButtonPressed} />
                 </View>
 
             </ScrollView>

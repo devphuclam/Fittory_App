@@ -12,7 +12,7 @@ import HomeScreen from '../features/home/HomeScreen';
 import MyCartScreen from '../features/cart/MyCartScreen';
 import ProductDetailScreen from '../features/product/ProductDetail/ProductDetailScreen';
 import SearchScreen from '../features/search/SearchScreen';
-
+import CheckoutScreen from '../features/checkout/CheckoutScreen';
 export type RootStackParamList = {
   Splash: undefined;
   ChooseLanguage: undefined;
@@ -21,6 +21,7 @@ export type RootStackParamList = {
   SignUp: undefined;
   Home: undefined;
   MyCart: undefined;
+  Checkout: undefined;
   ProductDetail: { productId: string };
   Search: undefined;
 };
@@ -39,7 +40,6 @@ export default function AppNavigator() {
         <Stack.Screen name='Home' component={HomeScreen} />
         <Stack.Screen name='MyCart' component={MyCartScreen} />
         <Stack.Screen name='ProductDetail' component={ProductDetailScreen} />
-        <Stack.Screen name='Search' component={SearchScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
