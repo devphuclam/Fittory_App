@@ -14,6 +14,7 @@ export const COLORS = {
   transparentWhite: 'rgba(249,249,249, 0.5)',
   placeholderOrange: 'rgba(249, 140, 11, 0.5)',
   bottomNavBar: 'rgba(11, 108, 249, 0.6)',
+  gold: '#FFD700',
 
   // Trạng thái
   success: '#4ADE80',

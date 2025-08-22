@@ -18,12 +18,18 @@ import OptionSelector from '../../../components/OptionSelector/OptionSelector';
 import { COLORS } from '../../../constants/color';
 import { sampleProducts } from '../../../data/sampleProducts';
 import { useMemo, useState } from 'react';
+import RegularButton from '../../../components/RegularButton/RegularButton';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 type ProductDetailRouteProp = RouteProp<RootStackParamList, 'ProductDetail'>;
+type ProductDetailProps = NativeStackScreenProps<
+  RootStackParamList,
+  'ProductDetail'
+>;
 const { width: screenWidth } = Dimensions.get('window');
 const MAIN_CONTENT_WIDTH = Math.round(screenWidth * 0.8);
 
-const ProductDetailScreen = () => {
+const ProductDetailScreen = ({ navigation }: ProductDetailProps) => {
   const [selectedColor, setSelectedColor] = useState('');
   const route = useRoute<ProductDetailRouteProp>();
   const { productId } = route.params;
@@ -81,6 +87,19 @@ const ProductDetailScreen = () => {
             selected={selectedColor}
             onSelect={handleSelectOption}
           />
+          <View style={styles.confirmSection}>
+            <Text style={styles.priceText} numberOfLines={1}>
+              {product.price}$
+            </Text>
+            <RegularButton
+              label='Add to cart'
+              buttonWidth={screenWidth * 0.8 * 0.35}
+              onPress={() => {
+                console.log(`Call 'create cart item' API`);
+                navigation.navigate('MyCart');
+              }}
+            />
+          </View>
         </View>
       </ScrollView>
       <BottomNavBar />
@@ -113,6 +132,21 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     gap: 20,
     paddingVertical: 10,
+  },
+  confirmSection: {
+    display: 'flex',
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  priceText: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    width: '50%',
+    color: COLORS.success,
+    marginLeft: screenWidth * 0.05,
+    textDecorationLine: 'underline',
   },
 });
 
