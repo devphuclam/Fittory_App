@@ -11,6 +11,7 @@ import SignUpScreen from '../features/auth/SignUpScreen';
 import HomeScreen from '../features/home/HomeScreen';
 import MyCartScreen from '../features/cart/MyCartScreen';
 import ProductDetailScreen from '../features/product/ProductDetail/ProductDetailScreen';
+import SearchScreen from '../features/search/SearchScreen';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   Home: undefined;
   MyCart: undefined;
   ProductDetail: { productId: string };
+  Search: undefined;
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -37,6 +39,7 @@ export default function AppNavigator() {
         <Stack.Screen name='Home' component={HomeScreen} />
         <Stack.Screen name='MyCart' component={MyCartScreen} />
         <Stack.Screen name='ProductDetail' component={ProductDetailScreen} />
+        <Stack.Screen name='Search' component={SearchScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
