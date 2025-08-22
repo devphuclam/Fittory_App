@@ -54,9 +54,10 @@ const CartItemCard = ({ name, attribute, quanity, illustration, money, removeIte
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
-                <TouchableOpacity onPress={goToDetailWithID}>
+                <TouchableOpacity style={{ width: "100%", height: "100%" }} onPress={goToDetailWithID}>
                     <Image style={styles.image} source={imageSource} resizeMode='cover'></Image>
                 </TouchableOpacity>
+
 
             </View>
             <View style={{ display: 'flex', flexDirection: 'row', flex: 1, padding: '2%' }}>

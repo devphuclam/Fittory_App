@@ -121,9 +121,9 @@ const MyCartScreen = ({ navigation }: Props) => {
                         <View style={{ width: '50%', height: 'auto', justifyContent: 'space-around', alignItems: 'flex-end', paddingRight: "10%" }}>
                             <Text style={{ fontSize: 20, fontWeight: 'bold', color: COLORS.success, textDecorationLine: 'underline', }}>{lastPriceState} $</Text>
                         </View>
-
                     </View>
                 </View>
+                <RegularButton label="Proceed to Checkout" buttonWidth={screenWidth} />
             </ScrollView>
             <BottomNavBar activeTab="Cart" />
         </View>
