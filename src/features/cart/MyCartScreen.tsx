@@ -14,6 +14,7 @@ import BottomNavBar from "../../components/BottomNavBar/BottomNavBar";
 import { useEffect } from "react";
 import InputWithIcon from "../../components/Input/InputWithIcon";
 import RegularButton from "../../components/RegularButton/RegularButton";
+import RegularButtonWithIcon from "../../components/RegularButton/RegularButtonWithIcon";
 
 const { width: screenWidth } = Dimensions.get('window');
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -33,6 +34,7 @@ const MyCartScreen = ({ navigation }: Props) => {
         setCartArrayState((prevItems) => {
             return prevItems.filter((item) => item.id !== id);
         })
+        handleCheckedItem(id, false);
     }
     const handleCheckedItem = (id: string, state: boolean) => {
         const item = cartArrayState.find(p => p.id === id);
@@ -59,7 +61,7 @@ const MyCartScreen = ({ navigation }: Props) => {
                 totalPrice += item.price * item.stock
         })
         setSubtotalState(totalPrice);
-        SetLastPriceState(totalPrice * (1 - discount) + delivery);
+        SetLastPriceState(Math.round((totalPrice * (1 - discount) + delivery) * 100) / 100);
     }, [checkedItemState]);
     useEffect(() => {
         console.log('Last Price:', lastPriceState);
@@ -122,8 +124,9 @@ const MyCartScreen = ({ navigation }: Props) => {
                             <Text style={{ fontSize: 20, fontWeight: 'bold', color: COLORS.success, textDecorationLine: 'underline', }}>{lastPriceState} $</Text>
                         </View>
                     </View>
+                    <RegularButtonWithIcon label=" Proceed to Checkout" icon={ICONS.shoppingbag} />
                 </View>
-                <RegularButton label="Proceed to Checkout" buttonWidth={screenWidth} />
+
             </ScrollView>
             <BottomNavBar activeTab="Cart" />
         </View>
