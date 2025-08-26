@@ -28,7 +28,6 @@ const MyCartScreen = ({ navigation }: Props) => {
     let count = cartArrayState.length;
     const [subtotalState, setSubtotalState] = useState<number>(0);
     let discount: number = 0.05;
-    let delivery: number = 10;
     const [lastPriceState, SetLastPriceState] = useState<number>(0);
     const handleRemoveItem = (id: string) => {
         setCartArrayState((prevItems) => {
@@ -64,7 +63,7 @@ const MyCartScreen = ({ navigation }: Props) => {
                 totalPrice += item.price * item.stock
         })
         setSubtotalState(totalPrice);
-        SetLastPriceState(Math.round((totalPrice * (1 - discount) + delivery) * 100) / 100);
+        SetLastPriceState(Math.round((totalPrice * (1 - discount)) * 100) / 100);
     }, [checkedItemState]);
     useEffect(() => {
         console.log('Last Price:', lastPriceState);
@@ -110,12 +109,12 @@ const MyCartScreen = ({ navigation }: Props) => {
                         <View style={{ width: '50%', height: 100, justifyContent: 'space-around', alignItems: 'center', paddingRight: '10%' }}>
                             <Text>Subtotal:</Text>
                             <Text>Discount:</Text>
-                            <Text>Delivery:</Text>
+
                         </View>
                         <View style={{ width: "50%", height: 100, justifyContent: 'space-around', alignItems: 'center', paddingRight: 0 }}>
                             <Text>{subtotalState} $</Text>
                             <Text>{discount * 100}%</Text>
-                            <Text>{delivery} $</Text>
+
                         </View>
                     </View>
                     <View style={styles.lastPriceSection}>
