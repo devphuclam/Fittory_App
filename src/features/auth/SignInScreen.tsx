@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View, Image, Text, Dimensions } from 'react-native';
 import { LOGO } from '../../assets/images/logo';
 import { COLORS } from '../../constants/color';
@@ -8,11 +8,28 @@ import InputWithIcon from '../../components/Input/InputWithIcon';
 import AnimatedLink from '../../components/AnimatedLink/AnimatedLink';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigations/AppNavigator';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const { width: screenWidth } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
 
 const SignInScreen = ({ navigation }: Props) => {
+  const { signIn } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      const res = await signIn(email, password);
+      console.log('Login response:', res);
+      if (res) {
+        navigation.navigate('Home');
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
+  };
+
   return (
     <View style={styles.container}>
       {/* Logo */}
@@ -26,12 +43,18 @@ const SignInScreen = ({ navigation }: Props) => {
           icon={ICONS.email}
           inputWidth={screenWidth * 0.8}
           inputHeight={40}
+          value={email}
+          onChangeText={setEmail}
+          // secureTextEntry
         />
         <InputWithIcon
           placeholder='Password'
           icon={ICONS.padlock}
           inputWidth={screenWidth * 0.8}
           inputHeight={40}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
         />
 
         {/* Sign-In Button */}
@@ -39,7 +62,7 @@ const SignInScreen = ({ navigation }: Props) => {
           label='Sign In'
           buttonWidth={screenWidth * 0.8}
           buttonHeight={46}
-          onPress={() => navigation.navigate('Home')}
+          onPress={handleLogin}
         />
       </View>
       <View style={styles.belowMainContent}>
