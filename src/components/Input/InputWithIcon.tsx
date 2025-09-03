@@ -26,6 +26,8 @@ type InputWithIconProps = TextInputProps & {
   onIconPress?: () => void;
   iconContainerStyle?: StyleProp<ViewStyle>;
   placeholderTextColor?: string;
+  onChangeText?: (text: string) => void;
+  value?: string;
 };
 
 const InputWithIcon: React.FC<InputWithIconProps> = (props) => {
