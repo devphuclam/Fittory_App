@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
     },
     bodyContainer: {
         paddingTop: '10%',
-        width: '80%',
+        width: '90%',
         alignSelf: 'center',
     },
     searchInputContainer: {
