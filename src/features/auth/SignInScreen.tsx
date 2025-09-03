@@ -20,13 +20,11 @@ const SignInScreen = ({ navigation }: Props) => {
 
   const handleLogin = async () => {
     try {
-      const res = await signIn(email, password);
-      console.log('Login response:', res);
-      if (res) {
-        navigation.navigate('Home');
-      }
-    } catch (error) {
-      console.error('Login failed:', error);
+      const user = await signIn(email.trim(), password);
+      console.log('Signed in user:', user);
+      navigation.navigate('Home');
+    } catch (err) {
+      console.error('Sign in error:', err);
     }
   };
 
