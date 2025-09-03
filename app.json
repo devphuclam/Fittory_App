@@ -25,6 +25,10 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "plugins": ["expo-secure-store"],
+    "extra": {
+      "MEDUSA_BASE_URL": "http://192.168.68.22:9000"
     }
   }
 }
