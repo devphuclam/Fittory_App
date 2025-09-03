@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View, Image, Text, Dimensions } from 'react-native';
 import { LOGO } from '../../assets/images/logo';
 import { COLORS } from '../../constants/color';
@@ -9,11 +9,25 @@ import AnimatedLink from '../../components/AnimatedLink/AnimatedLink';
 import LinkWithIcon from './components/LinkWithIcon';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigations/AppNavigator';
+import { AuthContext } from '../../contexts/AuthContext';
 
 const { width: screenWidth } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'SignUp'>;
 
 const SignUpScreen = ({ navigation }: Props) => {
+  const { signUp } = useContext(AuthContext);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const handleSignUp = async () => {
+    try {
+      const res = await signUp(email, password);
+      console.log('Signed up user:', res);
+      navigation.navigate('Home');
+    } catch (error) {
+      console.error(error);
+    }
+  };
   return (
     <View style={styles.container}>
       {/* Logo */}
@@ -27,25 +41,33 @@ const SignUpScreen = ({ navigation }: Props) => {
           icon={ICONS.email}
           inputWidth={screenWidth * 0.8}
           inputHeight={40}
+          value={email}
+          onChangeText={setEmail}
         />
         <InputWithIcon
           placeholder='Password'
           icon={ICONS.padlock}
           inputWidth={screenWidth * 0.8}
           inputHeight={40}
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
         />
         <InputWithIcon
           placeholder='Confirm Password'
           icon={ICONS.access}
           inputWidth={screenWidth * 0.8}
           inputHeight={40}
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+          secureTextEntry
         />
         {/* Sign-Up Button */}
         <ConfirmButton
           label='Sign Up'
           buttonWidth={screenWidth * 0.8}
           buttonHeight={46}
-          onPress={() => navigation.navigate('Home')}
+          onPress={handleSignUp}
         />
       </View>
       <View style={styles.belowMainContent}>
