@@ -19,9 +19,15 @@ const SignInScreen = ({ navigation }: Props) => {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-    const res = await signIn(email, password);
-    navigation.navigate('Home');
-    console.log('Login response:', res);
+    try {
+      const res = await signIn(email, password);
+      console.log('Login response:', res);
+      if (res) {
+        navigation.navigate('Home');
+      }
+    } catch (error) {
+      console.error('Login failed:', error);
+    }
   };
 
   return (
@@ -39,6 +45,7 @@ const SignInScreen = ({ navigation }: Props) => {
           inputHeight={40}
           value={email}
           onChangeText={setEmail}
+          // secureTextEntry
         />
         <InputWithIcon
           placeholder='Password'
@@ -47,6 +54,7 @@ const SignInScreen = ({ navigation }: Props) => {
           inputHeight={40}
           value={password}
           onChangeText={setPassword}
+          secureTextEntry
         />
 
         {/* Sign-In Button */}
