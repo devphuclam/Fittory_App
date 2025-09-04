@@ -21,7 +21,8 @@ export const COLORS = {
   error: '#EF4444',
   warning: '#FBBF24',
   info: '#2196F3',
-  disable: '#A0A0A0',
+  disable: 'rgba(160,160,160, 1)',
+  transparentDisable: '#a0a0a033',
   // Effect Color
   defaultShadow: 'rgba(0, 0, 0, 0.25)',
   orangeShadow: 'rgba(244,162,97, 0.25)',

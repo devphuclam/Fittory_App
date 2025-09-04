@@ -167,6 +167,7 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     backgroundColor: COLORS.background,
+    flexGrow: 1,
     paddingBottom: 40,
   },
   group: {

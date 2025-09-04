@@ -21,6 +21,7 @@ interface AuthContextType {
     options?: { first_name?: string; last_name?: string; metadata?: any }
   ) => Promise<any>;
   signOut: () => Promise<void>;
+  refreshUser?: () => Promise<any>;
 }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -82,9 +83,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   };
 
+  const refreshUser = async () => {
+    const profile = await getUser();
+    setUser(profile ?? null);
+    return profile;
+  };
   return (
     <AuthContext.Provider
-      value={{ user, loadingInitial, signIn, signOut, signUp }}
+      value={{ user, loadingInitial, signIn, signOut, signUp, refreshUser }}
     >
       {children}
     </AuthContext.Provider>
