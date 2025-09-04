@@ -30,7 +30,7 @@ const profileOptions = [
     code: 'setting',
     optionName: 'Profile Settings',
     optionIcon: ICONS.profilesetting,
-    route: '',
+    route: 'ProfileSetting',
   },
   {
     code: 'voucher',
