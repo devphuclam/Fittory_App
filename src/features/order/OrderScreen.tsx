@@ -15,17 +15,23 @@ import FilterDropdown from "../../components/FilterDropdown/FilterDropdown";
 import { FilterOption } from "../../components/FilterDropdown/FilterDropdown";
 import sampleProducts from "../../data/sampleProducts";
 import OrderCard from "./components/OrderCard";
+import { Image } from "react-native";
+import BottomNavBar from "../../components/BottomNavBar/BottomNavBar";
+import { useMemo } from "react";
 
 const { width: screenWidth } = Dimensions.get('window');
 
 type NavigationProp = NativeStackScreenProps<RootStackParamList>;
+type Props = NativeStackScreenProps<RootStackParamList, 'Order'>;
 const sortOptions: FilterOption[] = [
     { key: 'price', label: 'Price' },
-    { key: 'name', label: 'Name' },
-    { key: 'rating', label: 'Rating' },
+    { key: 'date', label: 'Date' },
 ];
 
-const OrderScreen = () => {
+const OrderScreen = ({ navigation }: Props) => {
+    const [orderArrayState, setOrderArrayState] = useState(sampleProducts);
+    type Product = typeof sampleProducts[1];
+    let count = orderArrayState.length;
     const [query, setQuery] = useState('');
     const [sortKey, setSortKey] = useState<string | null>(null);
     const [direction, setDirection] = useState<'asc' | 'desc' | null>('asc');
@@ -33,7 +39,34 @@ const OrderScreen = () => {
     const animate = () => {
         LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
     };
+    const filtered = useMemo(() => {
+        const q = query.trim().toLowerCase();
+        return orderArrayState.filter((p: any) =>
+            q ? (p.name || '').toLowerCase().includes(q) : true
+        );
+    }, [query, orderArrayState]);
 
+    const sorted = useMemo(() => {
+        if (!sortKey) return filtered;
+        const arr = [...filtered];
+        arr.sort((a: any, b: any) => {
+            const av = a[sortKey];
+            const bv = b[sortKey];
+            if (av == null && bv == null) return 0;
+            if (av == null) return 1;
+            if (bv == null) return -1;
+
+            if (typeof av === 'string' || typeof bv === 'string') {
+                const aS = String(av).toLowerCase();
+                const bS = String(bv).toLowerCase();
+                return direction === 'asc'
+                    ? aS.localeCompare(bS)
+                    : bS.localeCompare(aS);
+            }
+            return direction === 'asc' ? av - bv : bv - av;
+        });
+        return arr;
+    }, [filtered, sortKey, direction]);
 
     const handleFilterSelect = (
         key: string | null,
@@ -48,12 +81,12 @@ const OrderScreen = () => {
         <View style={styles.container}>
             <ScrollView
                 contentContainerStyle={styles.scrollContent}
-                showsVerticalScrollIndicator={false}    >
+                showsVerticalScrollIndicator={false}>
                 <Appbar style={{ marginTop: '15%', width: '85%', alignSelf: 'center' }} label="Order" returnable={true} />
                 <View style={styles.bodyContainer}>
                     <InputWithIcon
                         icon={ICONS.search}
-                        placeholder="Search"
+                        placeholder="Status"
                         onChangeText={(text) => { console.log(text) }}
                         containerStyles={styles.searchInputContainer} />
                     <View style={styles.sortRow}>
@@ -69,12 +102,24 @@ const OrderScreen = () => {
                             />
                         </View>
                     </View>
-                    <Text>Total: 2</Text>
-                    <OrderCard />
+                    <Text>Total: {sorted.length}</Text>
+                    {count === 0 ? (<Text>You Have Placed No Order</Text>) :
+                        (sorted.map((data, index) => (
+                            <OrderCard
+                                key={index}
+                                date="Wed 01/01/2111"
+                                orderStatus="Delivered"
+                                paymentStatus="Paid"
+                                orderId={data.id}
+                                items={data.stock}
+                                totalPrice={data.price * (data.stock ?? 0)}
+                                illustration={data.images[0]}
+                            />
+                        )))}
                 </View>
+
             </ScrollView>
-
-
+            <BottomNavBar activeTab="Order" />
         </View>
     )
 
