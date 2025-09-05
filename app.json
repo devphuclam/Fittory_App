@@ -26,9 +26,11 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": ["expo-secure-store"],
+    "plugins": [
+      "expo-secure-store"
+    ],
     "extra": {
-      "MEDUSA_BASE_URL": "http://192.168.68.29:9000"
+      "MEDUSA_BASE_URL": "http://192.168.68.36:9000"
     }
   }
 }
