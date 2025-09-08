@@ -16,6 +16,7 @@ import CheckoutScreen from '../features/checkout/CheckoutScreen';
 import VoucherScreen from '../features/profile/VoucherScreen';
 import OrderScreen from '../features/order/OrderScreen';
 import ProfileSettingScreen from '../features/profile/ProfileSettingScreen';
+import OrderDetail from '../features/order/OrderDetail';
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -31,6 +32,7 @@ export type RootStackParamList = {
   Voucher: undefined;
   Order: undefined;
   ProfileSetting: undefined;
+  OrderDetail: { orderId: string };
 };
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -52,6 +54,7 @@ export default function AppNavigator() {
         <Stack.Screen name='Voucher' component={VoucherScreen} />
         <Stack.Screen name='Order' component={OrderScreen} />
         <Stack.Screen name='ProfileSetting' component={ProfileSettingScreen} />
+        <Stack.Screen name='OrderDetail' component={OrderDetail} />
       </Stack.Navigator>
     </NavigationContainer>
   );

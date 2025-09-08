@@ -18,6 +18,7 @@ import OrderCard from "./components/OrderCard";
 import { Image } from "react-native";
 import BottomNavBar from "../../components/BottomNavBar/BottomNavBar";
 import { useMemo } from "react";
+import { set } from "react-hook-form";
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -26,10 +27,12 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Order'>;
 const sortOptions: FilterOption[] = [
     { key: 'price', label: 'Price' },
     { key: 'date', label: 'Date' },
+    { key: 'totalPrice', label: 'Total Price' }
 ];
 
 const OrderScreen = ({ navigation }: Props) => {
-    const [orderArrayState, setOrderArrayState] = useState(sampleProducts);
+    const [orderArrayState, setOrderArrayState] = useState(sampleProducts.map((p, index) =>
+        ({ ...p, totalPrice: p.price * (p.stock ?? 0) })));
     type Product = typeof sampleProducts[1];
     let count = orderArrayState.length;
     const [query, setQuery] = useState('');
@@ -76,6 +79,10 @@ const OrderScreen = ({ navigation }: Props) => {
         setSortKey(key);
         setDirection(dir ?? 'asc');
     };
+    const handleNavigateToDetail = (id: string) => {
+        console.log('Navigate to OrderDetail with id:', id);
+        navigation.navigate('OrderDetail', { orderId: id });
+    }
     return (
 
         <View style={styles.container}>
@@ -87,7 +94,7 @@ const OrderScreen = ({ navigation }: Props) => {
                     <InputWithIcon
                         icon={ICONS.search}
                         placeholder="Status"
-                        onChangeText={(text) => { console.log(text) }}
+                        onChangeText={(text) => { setQuery(text) }}
                         containerStyles={styles.searchInputContainer} />
                     <View style={styles.sortRow}>
                         <Text style={styles.sortLabel}>Sort By</Text>
@@ -114,10 +121,10 @@ const OrderScreen = ({ navigation }: Props) => {
                                 items={data.stock}
                                 totalPrice={data.price * (data.stock ?? 0)}
                                 illustration={data.images[0]}
+                                detailItemPressed={handleNavigateToDetail}
                             />
                         )))}
                 </View>
-
             </ScrollView>
             <BottomNavBar activeTab="Order" />
         </View>
