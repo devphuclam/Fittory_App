@@ -16,6 +16,7 @@ import CheckoutScreen from '../features/checkout/CheckoutScreen';
 import VoucherScreen from '../features/profile/VoucherScreen';
 import OrderScreen from '../features/order/OrderScreen';
 import ProfileSettingScreen from '../features/profile/ProfileSettingScreen';
+import ResetPasswordScreen from '../features/auth/ResetPasswordScreen';
 import OrderDetail from '../features/order/OrderDetail';
 
 export type RootStackParamList = {
@@ -24,6 +25,7 @@ export type RootStackParamList = {
   Profile: undefined;
   SignIn: undefined;
   SignUp: undefined;
+  ResetPassword: undefined;
   Home: undefined;
   MyCart: undefined;
   Checkout: undefined;
@@ -54,6 +56,7 @@ export default function AppNavigator() {
         <Stack.Screen name='Voucher' component={VoucherScreen} />
         <Stack.Screen name='Order' component={OrderScreen} />
         <Stack.Screen name='ProfileSetting' component={ProfileSettingScreen} />
+        <Stack.Screen name='ResetPassword' component={ResetPasswordScreen} />
         <Stack.Screen name='OrderDetail' component={OrderDetail} />
       </Stack.Navigator>
     </NavigationContainer>

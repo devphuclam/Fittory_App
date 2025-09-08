@@ -175,6 +175,24 @@ export async function createStoreCustomer(body: {
   }
 }
 
+export async function generateResetPasswordToken(identifier: string) {
+  try {
+    const r = await api.post('/auth/customer/emailpass/reset-password', {
+      identifier,
+    });
+    return r.data;
+  } catch (err: any) {
+    const message =
+      err?.response?.data?.message ||
+      err?.response?.data ||
+      err?.message ||
+      'Generate Resetpassword token error';
+    throw new Error(
+      typeof message === 'string' ? message : JSON.stringify(message)
+    );
+  }
+}
+
 /**
  * logout: gọi server logout nếu muốn (best-effort), rồi xóa token local
  */
