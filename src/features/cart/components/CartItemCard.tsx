@@ -17,10 +17,11 @@ type CartItemProps = {
     id: string,
     removeItemPressed?: (id: string) => void;
     checkboxTicked?: (id: string, state: boolean) => void;
+    readOnly?: boolean;
 }
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
-const CartItemCard = ({ name, attribute, quanity, illustration, money, removeItemPressed, id, checkboxTicked }: CartItemProps) => {
+const CartItemCard = ({ name, attribute, quanity, illustration, money, removeItemPressed, id, checkboxTicked, readOnly }: CartItemProps) => {
     const imageSource: ImageSourcePropType = typeof illustration === 'string' ?
         ({ uri: illustration } as ImageSourcePropType) :
         (illustration as ImageSourcePropType)
@@ -76,24 +77,27 @@ const CartItemCard = ({ name, attribute, quanity, illustration, money, removeIte
 
                 </View>
                 <View style={styles.right}>
-                    {checkboxState ? (
-                        <TouchableOpacity onPress={onPressCheckbox}>
-                            <ICONS.checkedbox width={28} height={28} />
-                        </TouchableOpacity>)
-                        :
-                        (
-                            <TouchableOpacity onPress={onPressCheckbox}>
-                                <ICONS.uncheckedbox width={24} height={24} />
-                            </TouchableOpacity>
-                        )}
+                    {!readOnly && (
+                        <>
+                            {checkboxState ? (
+                                <TouchableOpacity onPress={onPressCheckbox}>
+                                    <ICONS.checkedbox width={28} height={28} />
+                                </TouchableOpacity>
+                            ) : (
+                                <TouchableOpacity onPress={onPressCheckbox}>
+                                    <ICONS.uncheckedbox width={24} height={24} />
+                                </TouchableOpacity>
+                            )}
 
-                    <TouchableOpacity onPress={onPressRemoveCard}>
-                        <ICONS.removecartitem width={32} height={32} color={COLORS.red} />
-                    </TouchableOpacity>
+                            <TouchableOpacity onPress={onPressRemoveCard}>
+                                <ICONS.removecartitem width={32} height={32} color={COLORS.red} />
+                            </TouchableOpacity>
+                        </>
+                    )}
                 </View>
             </View>
 
-        </View>
+        </View >
     )
 }
 
