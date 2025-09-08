@@ -79,6 +79,10 @@ const OrderScreen = ({ navigation }: Props) => {
         setSortKey(key);
         setDirection(dir ?? 'asc');
     };
+    const handleNavigateToDetail = (id: string) => {
+        console.log('Navigate to OrderDetail with id:', id);
+        navigation.navigate('OrderDetail', { orderId: id });
+    }
     return (
 
         <View style={styles.container}>
@@ -117,10 +121,10 @@ const OrderScreen = ({ navigation }: Props) => {
                                 items={data.stock}
                                 totalPrice={data.price * (data.stock ?? 0)}
                                 illustration={data.images[0]}
+                                detailItemPressed={handleNavigateToDetail}
                             />
                         )))}
                 </View>
-
             </ScrollView>
             <BottomNavBar activeTab="Order" />
         </View>

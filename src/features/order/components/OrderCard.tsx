@@ -5,6 +5,7 @@ import { ICONS } from "../../../assets/images/icons";
 import { Image } from "react-native";
 import RegularButton from "../../../components/RegularButton/RegularButton";
 import ConfirmButton from "../../../components/ConfirmButton/ConfirmButton";
+import { useNavigation } from "@react-navigation/native";
 
 type OrderCardProps = {
     containerStyles?: ViewStyle;
@@ -16,13 +17,23 @@ type OrderCardProps = {
     items?: number;
     totalPrice?: number;
     illustration?: string | ImageSourcePropType;
-    detailItemPressed?: () => void;
+    detailItemPressed?: (id: string) => void;
 }
 
-const OrderCard = ({ containerStyles, textStyles, date, orderStatus, paymentStatus, orderId, items, illustration, totalPrice }: OrderCardProps) => {
+const OrderCard = ({ containerStyles, textStyles, date, orderStatus, paymentStatus, orderId, items, illustration, totalPrice, detailItemPressed }: OrderCardProps) => {
     const imageSource: ImageSourcePropType = typeof illustration === 'string' ?
         ({ uri: illustration } as ImageSourcePropType) :
         (illustration as ImageSourcePropType)
+
+    const formatPrice = (price?: number) => {
+        if (price == null) return "-";
+        return `$${price.toFixed(2)}`; // ví dụ: 1000 -> $1000.00
+    };
+    const handleDetailPressed = () => {
+        if (detailItemPressed) {
+            detailItemPressed(orderId ?? "");
+        }
+    }
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
@@ -34,11 +45,11 @@ const OrderCard = ({ containerStyles, textStyles, date, orderStatus, paymentStat
                     <Text style={styles.info}>Order Status: {orderStatus}</Text>
                     <Text style={styles.info}>Payment: {paymentStatus}</Text>
                     <Text style={styles.info}>Items: {items}</Text>
-                    <Text style={styles.info}>Total: {totalPrice}</Text>
+                    <Text style={styles.info}>Total: {formatPrice(totalPrice)}</Text>
                 </View>
                 <View style={styles.right}>
-                    <Text>#ID</Text>
-                    <ConfirmButton label="Detail" buttonWidth={80} buttonHeight={40} onPress={() => { }} />
+                    <Text># {orderId}</Text>
+                    <ConfirmButton label="Detail" buttonWidth={80} buttonHeight={35} onPress={handleDetailPressed} />
                 </View>
             </View>
         </View>
