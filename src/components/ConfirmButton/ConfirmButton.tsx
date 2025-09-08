@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, ViewStyle } from 'react-native';
 import { COLORS } from '../../constants/color';
 
 type ConfirmButtonProps = {
@@ -8,6 +8,7 @@ type ConfirmButtonProps = {
   label: string;
   isDisable?: boolean;
   isPressable?: boolean;
+  containerStyle?: ViewStyle
   onPress?: () => void;
 };
 
@@ -26,6 +27,7 @@ const ConfirmButton = (props: ConfirmButtonProps) => {
         styles.button,
         { width: buttonWidth, height: buttonHeight },
         isDisable && styles.disabledButton,
+        props.containerStyle,
       ]}
       onPress={onPress}
       disabled={isDisable && !isPressable}
