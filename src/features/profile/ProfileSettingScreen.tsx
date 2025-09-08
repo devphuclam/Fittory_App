@@ -13,15 +13,19 @@ import InputWithIcon from '../../components/Input/InputWithIcon';
 import ConfirmButton from '../../components/ConfirmButton/ConfirmButton';
 import { COLORS } from '../../constants/color';
 import { USER } from '../../assets/images/user';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../../navigations/AppNavigator';
 import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from '../../contexts/AuthContext';
 import { CustomerService } from '../../services';
 
 const { width: screenWidth } = Dimensions.get('window');
+type Props = NativeStackScreenProps<RootStackParamList, 'ProfileSetting'>;
 
-const ProfileSettingScreen = () => {
-  const { user, refreshUser } = useContext(AuthContext);
+const ProfileSettingScreen = ({ navigation }: Props) => {
+  const { user, refreshUser, signIn } = useContext(AuthContext);
   const [isActive, setIsActive] = useState(false);
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [password, setPassword] = useState('');
   const [formData, setFormData] = useState({
     firstName: user?.first_name || '',
@@ -72,6 +76,22 @@ const ProfileSettingScreen = () => {
       ...prev,
       [field]: value,
     }));
+  };
+
+  const handleChangePasswordPressed = () => {
+    setIsChangingPassword(!isChangingPassword);
+    // navigation.navigate('ResetPassword');
+  };
+
+  const handleSendPrevPassword = async () => {
+    try {
+      const res = await signIn(user.email, password);
+      console.log('Signed in user:', res);
+      navigation.navigate('ResetPassword');
+    } catch (err) {
+      console.error('Change Password Error', err);
+      setIsChangingPassword(!isChangingPassword);
+    }
   };
   return (
     <View style={styles.container}>
@@ -138,17 +158,7 @@ const ProfileSettingScreen = () => {
               value={formData.email}
               editable={false}
             />
-            <InputWithIcon
-              containerStyles={
-                isActive ? styles.textInput : styles.disableTextInput
-              }
-              inputStyles={{ color: COLORS.lightBlack }}
-              placeholderTextColor={COLORS.lightBlack}
-              placeholder='Password'
-              value={password}
-              editable={isActive}
-              secureTextEntry
-            />
+
             <InputWithIcon
               containerStyles={
                 isActive ? styles.textInput : styles.disableTextInput
@@ -160,12 +170,32 @@ const ProfileSettingScreen = () => {
               editable={isActive}
               onChangeText={(text) => handleInputChange('phone', text)}
             />
+            {isChangingPassword && (
+              <InputWithIcon
+                containerStyles={styles.textInput}
+                inputStyles={{ color: COLORS.lightBlack }}
+                placeholderTextColor={COLORS.lightBlack}
+                placeholder='Current Password'
+                value={password}
+                onChangeText={setPassword}
+                secureTextEntry
+              />
+            )}
             <View style={styles.buttonView}>
               <ConfirmButton label='Log Out' isDisable={isActive} />
-              <ConfirmButton
-                label='Change Password'
-                buttonWidth={screenWidth * 0.45}
-              />
+              {!isChangingPassword ? (
+                <ConfirmButton
+                  label='Change Password'
+                  buttonWidth={screenWidth * 0.45}
+                  onPress={handleChangePasswordPressed}
+                />
+              ) : (
+                <ConfirmButton
+                  label='Send'
+                  buttonWidth={screenWidth * 0.45}
+                  onPress={handleSendPrevPassword}
+                />
+              )}
               {isActive ? (
                 <ConfirmButton label='Save' onPress={handleSaveAndEdit} />
               ) : (

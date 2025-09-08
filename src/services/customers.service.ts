@@ -21,3 +21,34 @@ export async function createStoreCustomer(payload: any) {
   const r = await api.post('/store/customers', payload);
   return r.data;
 }
+
+export async function generateResetPasswordToken(identifier: string) {
+  const r = await api.post('/auth/customer/emailpass/reset-password', {
+    identifier,
+  });
+  return r.status;
+}
+
+export async function resetPassword(params: {
+  email: string;
+  password: string;
+  token: string;
+}) {
+  const { email, password, token } = params;
+  try {
+    const r = await api.post('/auth/customer/emailpass/update', {
+      email,
+      password,
+    });
+    return r.data;
+  } catch (err: any) {
+    const message =
+      err?.response?.data?.message ||
+      err?.response?.data ||
+      err?.message ||
+      'Reset password error';
+    throw new Error(
+      typeof message === 'string' ? message : JSON.stringify(message)
+    );
+  }
+}
