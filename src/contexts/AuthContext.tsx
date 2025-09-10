@@ -39,7 +39,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     (async () => {
       try {
-        const token = await SecureStore.getItemAsync('medusa_token');
+        const token = await SecureStore.getItemAsync(TOKEN_KEY);
         if (token) {
           const profile = await getUser();
           setUser(profile ?? null);
@@ -90,7 +90,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
   return (
     <AuthContext.Provider
-      value={{ user, loadingInitial, signIn, signOut, signUp, refreshUser }}
+      value={{
+        user,
+        loadingInitial,
+        signIn,
+        signOut,
+        signUp,
+        refreshUser,
+      }}
     >
       {children}
     </AuthContext.Provider>
