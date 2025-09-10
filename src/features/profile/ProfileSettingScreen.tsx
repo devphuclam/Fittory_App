@@ -18,12 +18,13 @@ import { RootStackParamList } from '../../navigations/AppNavigator';
 import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from '../../contexts/AuthContext';
 import { CustomerService } from '../../services';
+import { TOKEN_KEY } from '../../config';
 
 const { width: screenWidth } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'ProfileSetting'>;
 
 const ProfileSettingScreen = ({ navigation }: Props) => {
-  const { user, refreshUser, signIn } = useContext(AuthContext);
+  const { user, refreshUser, signIn, signOut } = useContext(AuthContext);
   const [isActive, setIsActive] = useState(false);
   const [isChangingPassword, setIsChangingPassword] = useState(false);
   const [password, setPassword] = useState('');
@@ -95,6 +96,27 @@ const ProfileSettingScreen = ({ navigation }: Props) => {
       console.error('Change Password Error', err);
       setIsChangingPassword(!isChangingPassword);
     }
+  };
+
+  const handleLogOut = () => {
+    Alert.alert('Log Out', 'Are you sure you want to log out?', [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Log Out',
+        style: 'destructive',
+        onPress: async () => {
+          await signOut?.();
+          console.log('Logging out', user);
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'SignIn' }],
+          });
+        },
+      },
+    ]);
   };
   return (
     <View style={styles.container}>
@@ -185,7 +207,11 @@ const ProfileSettingScreen = ({ navigation }: Props) => {
               />
             )}
             <View style={styles.buttonView}>
-              <ConfirmButton label='Log Out' isDisable={isActive} />
+              <ConfirmButton
+                label='Log Out'
+                isDisable={isActive}
+                onPress={handleLogOut}
+              />
               {!isChangingPassword ? (
                 <ConfirmButton
                   label='Change Password'

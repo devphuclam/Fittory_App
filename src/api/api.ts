@@ -200,7 +200,7 @@ export async function logout() {
   try {
     // best-effort: một số Medusa có route /auth/customer/emailpass/logout
     try {
-      await api.post('/auth/customer/emailpass/logout');
+      await deleteToken();
     } catch {
       // ignore
     }
