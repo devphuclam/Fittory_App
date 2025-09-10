@@ -1,6 +1,5 @@
 // src/api/services/customers.service.ts
 import api from '../api/api';
-import { Alert } from 'react-native';
 import { MEDUSA_BASE_URL, MEDUSA_PUBLISHABLE_KEY } from '../config';
 import axios from 'axios';
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import {
   StyleSheet,
   Dimensions,
@@ -16,6 +16,8 @@ import ProductCard from '../../components/ProductCard/ProductCard';
 import BannerCarousel from '../../components/BannerCarousel/BannerCarousel';
 import { sampleProducts } from '../../data/sampleProducts';
 import { ImageSourcePropType } from 'react-native';
+import { ProductService } from '../../services';
+import { RegionContext } from '../../contexts/RegionContext';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
@@ -30,6 +32,66 @@ const SECTION_VERTICAL_PADDING = 50;
 const SECTION_HEIGHT = Math.round(CARD_TOTAL_HEIGHT + SECTION_VERTICAL_PADDING); // pixel height cho section
 
 const HomeScreen = ({ navigation }: Props) => {
+  const regionContext = useContext(RegionContext);
+  if (!regionContext) {
+    return <Text>No region available</Text>;
+  }
+  const { region } = regionContext;
+  // Fetch products from Medusa backend
+  const [products, setProducts] = useState<any[]>([]);
+  useEffect(() => {
+    // Fetch products from Medusa backend
+    const fetchProducts = async () => {
+      if (!region?.id) return; // ⬅️ chặn khi region chưa load
+      try {
+        const response = await ProductService.listProducts(region?.id);
+        if (response && response.data) {
+          setProducts(response.data.products);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchProducts();
+  }, [region]);
+
+  // Safe banners
+  const banners =
+    products.length >= 3
+      ? [
+          {
+            id: 'a',
+            image:
+              products[0]?.thumbnail ||
+              'https://picsum.photos/1000/600?random=11',
+          },
+          {
+            id: 'b',
+            image:
+              products[1]?.thumbnail ||
+              'https://picsum.photos/1000/600?random=12',
+          },
+          {
+            id: 'c',
+            image:
+              products[2]?.thumbnail ||
+              'https://picsum.photos/1000/600?random=13',
+          },
+        ]
+      : [
+          { id: 'a', image: 'https://picsum.photos/1000/600?random=11' },
+          { id: 'b', image: 'https://picsum.photos/1000/600?random=12' },
+          { id: 'c', image: 'https://picsum.photos/1000/600?random=13' },
+        ];
+
+  // 👉 Hàm shuffle nhỏ gọn
+  const shuffleArray = (array: any[]) => {
+    return [...array].sort(() => Math.random() - 0.5);
+  };
+
+  // Trong HomeScreen
+  const weeklyPicks = shuffleArray(products).slice(0, 4); // lấy 4 sp random
+
   return (
     <View style={styles.container}>
       <ScrollView
@@ -43,11 +105,7 @@ const HomeScreen = ({ navigation }: Props) => {
         {/* Banner Section */}
         {/* banner */}
         <BannerCarousel
-          banners={[
-            { id: 'a', image: 'https://picsum.photos/1000/600?random=11' },
-            { id: 'b', image: 'https://picsum.photos/1000/600?random=12' },
-            { id: 'c', image: 'https://picsum.photos/1000/600?random=13' },
-          ]}
+          banners={banners}
           autoplay
           autoplayInterval={4500}
           onPressBanner={(b) => console.log('Pressed banner', b.id)}
@@ -62,18 +120,23 @@ const HomeScreen = ({ navigation }: Props) => {
             style={[styles.scrollSectionContainer, { height: SECTION_HEIGHT }]}
           >
             <FlatList
-              data={sampleProducts}
+              data={products}
               horizontal
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => {
-                const imageSource: ImageSourcePropType =
-                  typeof item.images[1] === 'string'
-                    ? { uri: item.images[1] }
-                    : (item.images[1] as ImageSourcePropType);
+                // Lấy ảnh
+                const imageSource: ImageSourcePropType = item.thumbnail
+                  ? { uri: item.thumbnail }
+                  : item.images?.[0]
+                  ? { uri: item.images[0].url }
+                  : (item.images[1] as ImageSourcePropType);
+                // Lấy giá (variant đầu tiên)
+                const price =
+                  item.variants?.[0]?.calculated_price?.calculated_amount ?? 0;
                 return (
                   <ProductCard
-                    productName={item.name}
-                    productPrice={item.price}
+                    productName={item.title}
+                    productPrice={price}
                     productImage={imageSource}
                     productId={item.id}
                   />
@@ -96,18 +159,27 @@ const HomeScreen = ({ navigation }: Props) => {
             style={[styles.scrollSectionContainer, { height: SECTION_HEIGHT }]}
           >
             <FlatList
-              data={sampleProducts.slice().reverse()} // ví dụ khác nội dung
+              data={[...products].sort(
+                (a, b) =>
+                  new Date(b.created_at).getTime() -
+                  new Date(a.created_at).getTime()
+              )} // ví dụ khác nội dung
               horizontal
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => {
-                const imageSource: ImageSourcePropType =
-                  typeof item.images[1] === 'string'
-                    ? { uri: item.images[1] }
-                    : (item.images[1] as ImageSourcePropType);
+                // Lấy ảnh
+                const imageSource: ImageSourcePropType = item.thumbnail
+                  ? { uri: item.thumbnail }
+                  : item.images?.[0]
+                  ? { uri: item.images[0].url }
+                  : (item.images[1] as ImageSourcePropType);
+                // Lấy giá (variant đầu tiên)
+                const price =
+                  item.variants?.[0]?.calculated_price?.calculated_amount ?? 0;
                 return (
                   <ProductCard
-                    productName={item.name}
-                    productPrice={item.price}
+                    productName={item.title}
+                    productPrice={price}
                     productImage={imageSource}
                     productId={item.id}
                   />
@@ -130,18 +202,23 @@ const HomeScreen = ({ navigation }: Props) => {
             style={[styles.scrollSectionContainer, { height: SECTION_HEIGHT }]}
           >
             <FlatList
-              data={sampleProducts.slice().reverse()} // ví dụ khác nội dung
+              data={weeklyPicks} // ví dụ khác nội dung
               horizontal
               keyExtractor={(item) => item.id}
               renderItem={({ item }) => {
-                const imageSource: ImageSourcePropType =
-                  typeof item.images[1] === 'string'
-                    ? { uri: item.images[1] }
-                    : (item.images[1] as ImageSourcePropType);
+                // Lấy ảnh
+                const imageSource: ImageSourcePropType = item.thumbnail
+                  ? { uri: item.thumbnail }
+                  : item.images?.[0]
+                  ? { uri: item.images[0].url }
+                  : (item.images[1] as ImageSourcePropType);
+                // Lấy giá (variant đầu tiên)
+                const price =
+                  item.variants?.[0]?.calculated_price?.calculated_amount ?? 0;
                 return (
                   <ProductCard
-                    productName={item.name}
-                    productPrice={item.price}
+                    productName={item.title}
+                    productPrice={price}
                     productImage={imageSource}
                     productId={item.id}
                   />
