@@ -87,7 +87,10 @@ const ProfileSettingScreen = ({ navigation }: Props) => {
     try {
       const res = await signIn(user.email, password);
       console.log('Signed in user:', res);
-      navigation.navigate('ResetPassword');
+      if (res) {
+        await CustomerService.generateResetPasswordToken(user.email);
+        navigation.navigate('ResetPassword');
+      }
     } catch (err) {
       console.error('Change Password Error', err);
       setIsChangingPassword(!isChangingPassword);

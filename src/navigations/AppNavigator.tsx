@@ -18,6 +18,9 @@ import OrderScreen from '../features/order/OrderScreen';
 import ProfileSettingScreen from '../features/profile/ProfileSettingScreen';
 import ResetPasswordScreen from '../features/auth/ResetPasswordScreen';
 import OrderDetail from '../features/order/OrderDetail';
+import * as Linking from 'expo-linking';
+
+const prefix = Linking.createURL('/');
 
 export type RootStackParamList = {
   Splash: undefined;
@@ -40,8 +43,16 @@ export type RootStackParamList = {
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export default function AppNavigator() {
+  const linking = {
+    prefixes: ['fittory://', prefix],
+    config: {
+      screens: {
+        ResetPassword: 'ResetPassword', // map với name trong RootStackParamList
+      },
+    },
+  };
   return (
-    <NavigationContainer>
+    <NavigationContainer linking={linking}>
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Splash' component={SplashScreen} />
         <Stack.Screen name='ChooseLanguage' component={ChooseLanguageScreen} />

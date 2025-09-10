@@ -1,5 +1,8 @@
 // src/api/services/customers.service.ts
 import api from '../api/api';
+import { Alert } from 'react-native';
+import { MEDUSA_BASE_URL, MEDUSA_PUBLISHABLE_KEY } from '../config';
+import axios from 'axios';
 
 export async function getProfile() {
   const r = await api.get('/store/customers/me');
@@ -36,11 +39,21 @@ export async function resetPassword(params: {
 }) {
   const { email, password, token } = params;
   try {
-    const r = await api.post('/auth/customer/emailpass/update', {
-      email,
-      password,
-    });
-    return r.data;
+    const r = await axios.post(
+      `${MEDUSA_BASE_URL}/auth/customer/emailpass/update`,
+      {
+        email,
+        password,
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+          'x-publishable-api-key': MEDUSA_PUBLISHABLE_KEY, // luôn gửi publishable key cho store routes
+        },
+      }
+    );
+    return r.status;
   } catch (err: any) {
     const message =
       err?.response?.data?.message ||

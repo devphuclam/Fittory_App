@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, View, Image, Text, Dimensions } from 'react-native';
 import { LOGO } from '../../assets/images/logo';
 import { COLORS } from '../../constants/color';
@@ -11,15 +11,45 @@ import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigations/AppNavigator';
 import { AuthContext } from '../../contexts/AuthContext';
 import { CustomerService } from '../../services';
+import { useRoute } from '@react-navigation/native';
+import * as Linking from 'expo-linking';
 
 const { width: screenWidth } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'ResetPassword'>;
 
 const ResetPasswordScreen = ({ navigation }: Props) => {
+  const route = useRoute();
+  const params = route.params as { token?: string; email?: string };
   const { user } = useContext(AuthContext);
   const [email, setEmail] = useState(user?.email || '');
+  const [token, setToken] = useState(params?.token || '');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  useEffect(() => {
+    const handleUrl = (url: string) => {
+      const parsed = Linking.parse(url);
+      if (parsed.queryParams?.token && parsed.queryParams?.email) {
+        const rawToken = parsed.queryParams.token as string;
+        const rawEmail = parsed.queryParams.email as string;
+
+        // Giải mã token/email từ URL
+        setToken(decodeURIComponent(rawToken));
+        setEmail(decodeURIComponent(rawEmail));
+      }
+    };
+
+    Linking.getInitialURL().then((url) => {
+      if (url) handleUrl(url);
+    });
+
+    const sub = Linking.addEventListener('url', ({ url }) => {
+      handleUrl(url);
+    });
+
+    return () => {
+      sub.remove();
+    };
+  }, []);
 
   const handleResetPassword = async () => {
     // Logic to handle password reset
@@ -27,23 +57,19 @@ const ResetPasswordScreen = ({ navigation }: Props) => {
       alert('Passwords do not match');
       return;
     } else {
+      const res = await CustomerService.resetPassword({
+        email,
+        password,
+        token,
+      });
+      if (res) {
+        alert('Password updated successfully');
+        navigation.navigate('SignIn');
+      }
       try {
-        const token = await CustomerService.generateResetPasswordToken(email);
-        console.log('Reset token:', token);
-        // if (token === 201) {
-        //   const res = await CustomerService.resetPassword({
-        //     email: email,
-        //     password: password,
-        //     token: 'reset-token-placeholder',
-        //   });
-        //   if (res) {
-        //     alert(
-        //       'Password reset successful. Please sign in with your new password.'
-        //     );
-        //     navigation.navigate('SignIn');
-        //   }
-        // }
-      } catch (error) {}
+      } catch (error) {
+        alert('Error: ' + error);
+      }
     }
   };
 

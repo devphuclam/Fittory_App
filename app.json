@@ -2,6 +2,7 @@
   "expo": {
     "name": "Fittory_App",
     "slug": "Fittory_App",
+    "scheme": "fittory",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -26,9 +27,7 @@
     "web": {
       "favicon": "./assets/favicon.png"
     },
-    "plugins": [
-      "expo-secure-store"
-    ],
+    "plugins": ["expo-secure-store"],
     "extra": {
       "MEDUSA_BASE_URL": "http://192.168.68.36:9000"
     }
