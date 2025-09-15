@@ -73,7 +73,7 @@ const ProductCard = ({
         </Text>
       </View>
 
-      <Text style={styles.price}>${productPrice}</Text>
+      <Text style={styles.price}>€{productPrice}</Text>
 
       <RegularButton
         label='Details'

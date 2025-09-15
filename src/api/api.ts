@@ -1,7 +1,12 @@
 // src/api/api.ts
 import axios, { AxiosInstance, AxiosRequestHeaders } from 'axios';
 import * as SecureStore from 'expo-secure-store';
-import { MEDUSA_BASE_URL, MEDUSA_PUBLISHABLE_KEY, TOKEN_KEY } from '../config';
+import {
+  MEDUSA_BASE_URL,
+  MEDUSA_PUBLISHABLE_KEY,
+  TOKEN_KEY,
+  REGION_KEY,
+} from '../config';
 
 let api: AxiosInstance;
 
@@ -67,6 +72,20 @@ export async function getToken(): Promise<string | null> {
 
 export async function deleteToken() {
   await SecureStore.deleteItemAsync(TOKEN_KEY);
+}
+
+/** Region helpers */
+export async function setRegion(region: any) {
+  await SecureStore.setItemAsync(REGION_KEY, JSON.stringify(region));
+}
+
+export async function getRegion(): Promise<any | null> {
+  const json = await SecureStore.getItemAsync(REGION_KEY);
+  return json ? JSON.parse(json) : null;
+}
+
+export async function deleteRegion() {
+  await SecureStore.deleteItemAsync(REGION_KEY);
 }
 
 /**

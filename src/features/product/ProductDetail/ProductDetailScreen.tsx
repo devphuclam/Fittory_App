@@ -17,7 +17,7 @@ import ExpandableSection from '../../../components/ExpandableSection/ExpandableS
 import OptionSelector from '../../../components/OptionSelector/OptionSelector';
 import { COLORS } from '../../../constants/color';
 import { sampleProducts } from '../../../data/sampleProducts';
-import { useMemo, useState } from 'react';
+import { useMemo, useState, useContext } from 'react';
 import RegularButton from '../../../components/RegularButton/RegularButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
