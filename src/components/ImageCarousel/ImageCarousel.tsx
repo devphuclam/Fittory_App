@@ -113,9 +113,7 @@ export default function ImageCarousel({
   const renderItem = ({ item }: { item: ImageInput }) => {
     // build ImageSourcePropType safely
     const source: ImageSourcePropType =
-      typeof item === 'string'
-        ? ({ uri: item } as ImageSourcePropType)
-        : (item as ImageSourcePropType);
+      typeof item === 'string' ? { uri: item } : (item as ImageSourcePropType);
 
     return (
       <View style={styles.imageWrapper}>
@@ -188,7 +186,7 @@ export default function ImageCarousel({
           {images.map((img, i) => {
             const source: ImageSourcePropType =
               typeof img === 'string'
-                ? ({ uri: img } as ImageSourcePropType)
+                ? { uri: img }
                 : (img as ImageSourcePropType);
             const isActive = i === activeIndex;
             return (
