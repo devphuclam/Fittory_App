@@ -10,6 +10,7 @@ import Appbar from "../../components/Appbar/Appbar";
 import { Dimensions } from "react-native";
 import { ScrollView } from "react-native";
 import { useState } from "react";
+import RegularButton from "../../components/RegularButton/RegularButton";
 
 const { width: screenWidth } = Dimensions.get('window');
 
@@ -27,9 +28,13 @@ const OrderDetail = () => {
                         name="Product Name"
                         readOnly={true} />
 
-                    <ExpandableSection title="Delivery"></ExpandableSection>
-                    <ExpandableSection title="Order Summary"></ExpandableSection>
+                    <ExpandableSection title="Delivery" content={'test content'}></ExpandableSection>
+                    <ExpandableSection title="Order Summary" content={'test content'}></ExpandableSection>
                 </View>
+                <View style={styles.buttonContainer}>
+                    <ConfirmButton label="Cancel Order" buttonWidth={screenWidth * 0.9} buttonHeight={50} containerStyle={styles.button} ></ConfirmButton>
+                </View>
+
             </ScrollView>
 
         </View>
@@ -51,7 +56,14 @@ const styles = StyleSheet.create({
         width: '90%',
         alignSelf: 'center',
     },
-
+    buttonContainer: {
+        marginTop: '10%',
+        width: '100%',
+        alignItems: 'center',
+    },
+    button: {
+        backgroundColor: COLORS.specialText,
+    },
 })
 
 export default OrderDetail;
