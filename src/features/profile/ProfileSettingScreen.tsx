@@ -19,6 +19,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from '../../contexts/AuthContext';
 import { CustomerService } from '../../services';
 import { TOKEN_KEY } from '../../config';
+import * as LocalAuthentication from 'expo-local-authentication';
 
 const { width: screenWidth } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'ProfileSetting'>;
@@ -34,6 +35,40 @@ const ProfileSettingScreen = ({ navigation }: Props) => {
     phone: user?.phone || '',
     email: user?.email || '',
   });
+  const handleBiometricAuth = async () => {
+    // Kiểm tra thiết bị có hỗ trợ sinh trắc không
+    const hasHardware = await LocalAuthentication.hasHardwareAsync();
+    if (!hasHardware) {
+      Alert.alert('Thiết bị không hỗ trợ vân tay');
+      return;
+    }
+
+    // Kiểm tra có cài đặt sinh trắc nào chưa
+    const isEnrolled = await LocalAuthentication.isEnrolledAsync();
+    if (!isEnrolled) {
+      Alert.alert('Chưa cài vân tay hoặc FaceID trên thiết bị');
+      return;
+    }
+
+    // Hiển thị prompt yêu cầu user xác thực
+    const result = await LocalAuthentication.authenticateAsync({
+      promptMessage: 'Xác thực bằng vân tay',
+      fallbackLabel: 'Nhập mật khẩu', // chỉ iOS
+      cancelLabel: 'Hủy', // chỉ Android
+    });
+
+    if (result.success) {
+      Alert.alert('✅ Xác thực thành công');
+      const res = await CustomerService.generateResetPasswordToken(user.email);
+      if (res) {
+        navigation.navigate('ResetPassword');
+      } else {
+        Alert.alert('❌ Xác thực thất bại');
+      }
+    } else {
+      Alert.alert('❌ Xác thực thất bại');
+    }
+  };
   const [profileImage, setProfileImage] = useState<string | null>(null);
   const pickImage = async () => {
     const permissionResult =
@@ -77,11 +112,6 @@ const ProfileSettingScreen = ({ navigation }: Props) => {
       ...prev,
       [field]: value,
     }));
-  };
-
-  const handleChangePasswordPressed = () => {
-    setIsChangingPassword(!isChangingPassword);
-    // navigation.navigate('ResetPassword');
   };
 
   const handleSendPrevPassword = async () => {
@@ -195,36 +225,18 @@ const ProfileSettingScreen = ({ navigation }: Props) => {
               editable={isActive}
               onChangeText={(text) => handleInputChange('phone', text)}
             />
-            {isChangingPassword && (
-              <InputWithIcon
-                containerStyles={styles.textInput}
-                inputStyles={{ color: COLORS.lightBlack }}
-                placeholderTextColor={COLORS.lightBlack}
-                placeholder='Current Password'
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry
-              />
-            )}
             <View style={styles.buttonView}>
               <ConfirmButton
                 label='Log Out'
                 isDisable={isActive}
                 onPress={handleLogOut}
               />
-              {!isChangingPassword ? (
-                <ConfirmButton
-                  label='Change Password'
-                  buttonWidth={screenWidth * 0.45}
-                  onPress={handleChangePasswordPressed}
-                />
-              ) : (
-                <ConfirmButton
-                  label='Send'
-                  buttonWidth={screenWidth * 0.45}
-                  onPress={handleSendPrevPassword}
-                />
-              )}
+              <ConfirmButton
+                label='Change Password'
+                buttonWidth={screenWidth * 0.45}
+                onPress={handleBiometricAuth}
+              />
+
               {isActive ? (
                 <ConfirmButton label='Save' onPress={handleSaveAndEdit} />
               ) : (
