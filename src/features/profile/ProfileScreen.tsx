@@ -25,7 +25,12 @@ const { width: screenWidth } = Dimensions.get('window');
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 type Props = NativeStackScreenProps<RootStackParamList, 'Profile'>;
-const profileOptions = [
+const profileOptions: {
+  code: string;
+  optionName: string;
+  optionIcon: any;
+  route?: Exclude<keyof RootStackParamList, 'ProductDetail'>;
+}[] = [
   {
     code: 'setting',
     optionName: 'Profile Settings',
@@ -42,7 +47,6 @@ const profileOptions = [
     code: 'security',
     optionName: 'Security',
     optionIcon: ICONS.security,
-    route: '',
   },
   {
     code: 'language',
@@ -112,12 +116,9 @@ const ProfileScreen = ({ navigation }: Props) => {
                 optionName={option.optionName}
                 icon={option.optionIcon}
                 onPress={() => {
-                  navigator.navigate(
-                    option.route as Exclude<
-                      keyof RootStackParamList,
-                      'ProductDetail'
-                    >
-                  );
+                  if (option.route) {
+                    navigator.navigate(option.route as any);
+                  }
                 }}
               />
             ))}

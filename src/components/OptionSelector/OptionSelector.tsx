@@ -1,22 +1,21 @@
 import React from 'react';
-import {
-  View,
-  Text,
-  TouchableOpacity,
-  StyleSheet,
-  Dimensions,
-} from 'react-native';
+import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import ConfirmButton from '../ConfirmButton/ConfirmButton';
 import { COLORS } from '../../constants/color';
 
-type OptionSelectorProps = {
-  title: string; // Tiêu đề (ví dụ: "Choose Color")
-  options: string[]; // Danh sách option (ví dụ: ["Black", "White"])
-  selected: string; // Option đang chọn
-  onSelect: (option: string) => void; // Hàm callback khi chọn
+const { width: SCREEN_WIDTH } = Dimensions.get('window');
+
+export type OptionItem = {
+  id: string;
+  label: string;
 };
 
-const { width: SCREEN_WIDTH } = Dimensions.get('window');
+type OptionSelectorProps = {
+  title: string; // Tiêu đề (ví dụ: "Choose Size")
+  options: OptionItem[]; // Danh sách option
+  selected: string | null; // id option đang chọn
+  onSelect: (id: string, label: string) => void; // Callback khi chọn
+};
 
 const OptionSelector = ({
   title,
@@ -28,15 +27,15 @@ const OptionSelector = ({
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
       <View style={styles.optionsContainer}>
-        {options.map((option, idx) => {
-          const isDisable = selected !== option;
+        {options.map((opt) => {
+          const isActive = selected === opt.id;
           return (
             <ConfirmButton
-              key={idx}
-              label={option}
-              isDisable={isDisable}
+              key={opt.id}
+              label={opt.label}
+              isDisable={!isActive} // nếu không phải selected thì "disable" style
               isPressable={true}
-              onPress={() => onSelect(option)}
+              onPress={() => onSelect(opt.id, opt.label)}
             />
           );
         })}
@@ -50,7 +49,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 16,
     fontWeight: 'bold',
-    color: COLORS.specialText, // cam giống hình
+    color: COLORS.specialText,
     marginLeft: SCREEN_WIDTH * 0.05,
     marginBottom: 8,
   },
@@ -63,6 +62,7 @@ const styles = StyleSheet.create({
     backgroundColor: COLORS.section,
     borderRadius: 10,
     paddingVertical: SCREEN_WIDTH * 0.05,
+    gap: 10, // khoảng cách giữa các button
   },
 });
 

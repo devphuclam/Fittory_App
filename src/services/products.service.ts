@@ -10,3 +10,14 @@ export async function listProducts(regionId: string) {
     console.error('Error listing products:', error);
   }
 }
+
+export async function getProduct(productId: string, regionId?: string) {
+  try {
+    const r = await api.get(
+      `/store/products/${productId}?region_id=${regionId || ''}`
+    );
+    return r;
+  } catch (error) {
+    console.error('Error getting product:', error);
+  }
+}
