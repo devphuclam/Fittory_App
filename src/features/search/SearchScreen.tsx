@@ -1,5 +1,5 @@
 // SearchScreen.tsx
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useContext, useEffect } from 'react';
 import {
   StyleSheet,
   Dimensions,
@@ -19,8 +19,11 @@ import InputWithIcon from '../../components/Input/InputWithIcon';
 import FilterDropdown, {
   FilterOption,
 } from '../../components/FilterDropdown/FilterDropdown';
-import { sampleProducts } from '../../data/sampleProducts'; // dùng file bạn gửi. :contentReference[oaicite:1]{index=1}
+import { sampleProducts } from '../../data/sampleProducts';
 import { ICONS } from '../../assets/images/icons';
+import { RegionContext } from '../../contexts/RegionContext';
+import { ProductService } from '../../services';
+import { ImageSourcePropType } from 'react-native';
 
 const { width: screenWidth } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'Search'>;
@@ -34,10 +37,29 @@ const sortOptions: FilterOption[] = [
 ];
 
 const SearchScreen = ({ navigation }: Props) => {
+  const regionContext = useContext(RegionContext);
+  const { region } = regionContext || {}; // luôn khai báo hook trước
   const [query, setQuery] = useState('');
   const [sortKey, setSortKey] = useState<string | null>(null);
   const [direction, setDirection] = useState<'asc' | 'desc' | null>('asc');
   const [page, setPage] = useState(1);
+  const [products, setProducts] = useState<any[]>([]);
+
+  useEffect(() => {
+    // Fetch products from Medusa backend
+    const fetchProducts = async () => {
+      if (!region?.id) return; // ⬅️ chặn khi region chưa load
+      try {
+        const response = await ProductService.listProducts(region?.id);
+        if (response && response.data) {
+          setProducts(response.data.products);
+        }
+      } catch (error) {
+        console.error('Error fetching products:', error);
+      }
+    };
+    fetchProducts();
+  }, [region]);
 
   const animate = () => {
     LayoutAnimation.configureNext(LayoutAnimation.Presets.easeInEaseOut);
@@ -46,10 +68,10 @@ const SearchScreen = ({ navigation }: Props) => {
   // filter by query
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
-    return sampleProducts.filter((p: any) =>
-      q ? (p.name || '').toLowerCase().includes(q) : true
+    return products.filter((p: any) =>
+      q ? (p.title || '').toLowerCase().includes(q) : true
     );
-  }, [query]);
+  }, [products, query]);
 
   // sort
   const sorted = useMemo(() => {
@@ -132,18 +154,21 @@ const SearchScreen = ({ navigation }: Props) => {
   );
 
   const renderItem = ({ item }: { item: any }) => {
-    const firstImage = Array.isArray(item.images)
-      ? item.images[0]
-      : item.images;
-    const productImage =
-      typeof firstImage === 'string' ? { uri: firstImage } : firstImage;
+    // Lấy ảnh
+    const imageSource: ImageSourcePropType = item.thumbnail
+      ? { uri: item.thumbnail }
+      : item.images?.[0]
+      ? { uri: item.images[0].url }
+      : (item.images[1] as ImageSourcePropType);
+    // Lấy giá (variant đầu tiên)
+    const price = item.variants?.[0]?.calculated_price?.calculated_amount ?? 0;
     return (
       <View style={styles.cardWrapper}>
         <ProductCard
+          productName={item.title}
+          productPrice={price}
+          productImage={imageSource}
           productId={item.id}
-          productName={item.name}
-          productPrice={item.price}
-          productImage={productImage}
         />
       </View>
     );

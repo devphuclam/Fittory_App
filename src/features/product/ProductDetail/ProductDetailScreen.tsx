@@ -47,7 +47,6 @@ const ProductDetailScreen = ({ navigation }: ProductDetailProps) => {
         setLoading(true);
         const response = await ProductService.getProduct(productId, region?.id);
         if (response && response.data) {
-          console.log('Product detail: ', response.data.product);
           setProduct(response.data.product);
         }
       } catch (error) {
@@ -83,7 +82,9 @@ const ProductDetailScreen = ({ navigation }: ProductDetailProps) => {
   // lấy giá hiển thị
   const displayPrice = useMemo(() => {
     if (selectedVariant?.calculated_price) {
-      return `${selectedVariant.calculated_price.calculated_amount.toFixed(2)}`;
+      return `${selectedVariant.calculated_price.calculated_amount.toFixed(
+        2
+      )} €`;
     }
 
     if (product?.variants?.length) {
@@ -96,15 +97,84 @@ const ProductDetailScreen = ({ navigation }: ProductDetailProps) => {
         const max = Math.max(...prices);
 
         if (min === max) {
-          return `${min.toFixed(2)}`;
+          return `${min.toFixed(2)} €`;
         } else {
-          return `${min.toFixed(2)} - ${max.toFixed(2)} `;
+          return `${min.toFixed(2)} - ${max.toFixed(2)} €`;
         }
       }
     }
 
     return 'No price';
   }, [selectedVariant, product]);
+
+  const infoSource = selectedVariant ?? product;
+
+  const productInformationNode = useMemo(() => {
+    if (!infoSource) return null;
+
+    const info = [
+      { label: 'Height', value: infoSource.height, unit: 'cm' },
+      { label: 'Width', value: infoSource.width, unit: 'cm' },
+      { label: 'Length', value: infoSource.length, unit: 'cm' },
+      { label: 'Weight', value: infoSource.weight, unit: 'g' },
+      {
+        label: 'Country of origin',
+        value: (
+          infoSource.origin_country || product.origin_country
+        )?.toUpperCase(),
+      },
+    ].filter((i) => i.value != null && i.value !== '');
+
+    if (!info.length) {
+      return <Text>No product information available.</Text>;
+    }
+
+    return (
+      <View style={{ gap: 8, marginBottom: 24 }}>
+        {info.map((item) => (
+          <View
+            key={item.label}
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+            }}
+          >
+            <Text style={{ fontWeight: '600', color: COLORS.lightBlack }}>
+              {item.label}
+            </Text>
+            <Text style={{ color: COLORS.black }}>
+              {item.value}
+              {item.unit ? ` ${item.unit}` : ''}
+            </Text>
+          </View>
+        ))}
+      </View>
+    );
+  }, [infoSource, product]);
+
+  const shippingAndReturnNode = (
+    <View style={{ gap: 12 }}>
+      <View>
+        <Text style={{ fontWeight: '700', marginBottom: 4 }}>
+          Fast delivery
+        </Text>
+        <Text>
+          Your package will arrive in 3-5 business days at your pick up location
+          or in the comfort of your home.
+        </Text>
+      </View>
+
+      <View>
+        <Text style={{ fontWeight: '700', marginBottom: 4 }}>
+          Simple exchanges
+        </Text>
+        <Text>
+          Is the fit not quite right? No worries – we’ll exchange your product
+          for a new one.
+        </Text>
+      </View>
+    </View>
+  );
 
   if (loading) {
     return (
@@ -155,11 +225,11 @@ const ProductDetailScreen = ({ navigation }: ProductDetailProps) => {
           />
           <ExpandableSection
             title='Product Information'
-            content={product.description}
+            content={productInformationNode}
           />
           <ExpandableSection
             title='Shipping & Return'
-            content={product.description}
+            content={shippingAndReturnNode}
           />
 
           {product.options?.map((opt: any) => (
