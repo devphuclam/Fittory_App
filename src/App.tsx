@@ -4,16 +4,19 @@ import AppNavigator from './navigations/AppNavigator';
 import { enableScreens } from 'react-native-screens';
 import { AuthProvider } from './contexts/AuthContext';
 import { RegionProvider } from './contexts/RegionContext';
+import { CartProvider } from './contexts/CartContext';
 
 enableScreens();
 
 export default function App() {
   return (
-    <RegionProvider>
-      <AuthProvider>
-        <AppNavigator />
-      </AuthProvider>
-    </RegionProvider>
+    <CartProvider>
+      <RegionProvider>
+        <AuthProvider>
+          <AppNavigator />
+        </AuthProvider>
+      </RegionProvider>
+    </CartProvider>
   );
 }
 

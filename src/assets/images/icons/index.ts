@@ -20,6 +20,8 @@ import RightArrow from './rightarrow.svg';
 import CheckedBox from './checkedbox.svg';
 import RemoveCartItem from './removecartitem.svg';
 import UncheckedBox from './uncheckedbox.svg';
+import Plus from './plus.svg';
+import Minus from './minus.svg';
 
 export const ICONS = {
   loading: LoadingIcon,
@@ -44,4 +46,6 @@ export const ICONS = {
   checkedbox: CheckedBox,
   uncheckedbox: UncheckedBox,
   removecartitem: RemoveCartItem,
+  plus: Plus,
+  minus: Minus,
 };
