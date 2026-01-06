@@ -25,11 +25,17 @@
       "package": "com.anonymous.Fittory_App"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
     },
-    "plugins": ["expo-secure-store"],
+    "plugins": [
+      "expo-secure-store",
+      "expo-web-browser"
+    ],
     "extra": {
-      "MEDUSA_BASE_URL": "http://192.168.68.36:9000"
+      "MEDUSA_BASE_URL": "http://192.168.68.36:9000",
+      "eas": {
+        "projectId": "cae6fd95-5b7c-4cf8-bdc3-729c882510bf"
+      }
     }
   }
 }
