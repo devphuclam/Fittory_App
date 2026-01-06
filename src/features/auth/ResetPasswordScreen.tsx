@@ -119,31 +119,6 @@ const ResetPasswordScreen = ({ navigation }: Props) => {
       </View>
       <View style={styles.belowMainContent}>
         {/* Procced to Sign In */}
-        <View style={{ display: 'flex', flexDirection: 'row' }}>
-          <Text style={[styles.normalText]}>
-            {'Already have an account ? '}
-          </Text>
-          <AnimatedLink
-            label='Sign In'
-            textStyle={styles.linkText}
-            onPress={() => navigation.navigate('SignIn')}
-          />
-        </View>
-        {/* Proceed to Sign Up with Google */}
-        <View style={[{ alignItems: 'center', width: '100%', margin: 20 }]}>
-          <Text style={styles.normalText}>Or</Text>
-          <LinkWithIcon
-            label='Sign up with Google'
-            icon={ICONS.google}
-            textStyle={styles.linkText}
-          />
-          {/* Proceed to Sign Up with Facebook */}
-          <LinkWithIcon
-            label='Sign up with Facebook'
-            icon={ICONS.facebook}
-            textStyle={styles.linkText}
-          />
-        </View>
       </View>
     </View>
   );
