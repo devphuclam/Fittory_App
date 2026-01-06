@@ -11,17 +11,17 @@ import { useRoute, RouteProp } from '@react-navigation/native';
 import { RootStackParamList } from '../../../navigations/AppNavigator';
 import Appbar from '../../../components/Appbar/Appbar';
 import BottomNavBar from '../../../components/BottomNavBar/BottomNavBar';
-import ProductCarousel from '../../../components/ProductCarousel/ProductCarousel';
 import ImageCarousel from '../../../components/ImageCarousel/ImageCarousel';
 import ExpandableSection from '../../../components/ExpandableSection/ExpandableSection';
 import OptionSelector from '../../../components/OptionSelector/OptionSelector';
 import { COLORS } from '../../../constants/color';
-import { sampleProducts } from '../../../data/sampleProducts';
 import { useMemo, useState, useContext, useEffect } from 'react';
 import RegularButton from '../../../components/RegularButton/RegularButton';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { ProductService } from '../../../services';
 import { RegionContext } from '../../../contexts/RegionContext';
+import { createCart, addItemToCart } from '../../../services/carts.service';
+import { CartContext } from '../../../contexts/CartContext';
 
 type ProductDetailRouteProp = RouteProp<RootStackParamList, 'ProductDetail'>;
 type ProductDetailProps = NativeStackScreenProps<
@@ -35,6 +35,8 @@ const ProductDetailScreen = ({ navigation }: ProductDetailProps) => {
   const regionContext = useContext(RegionContext);
   const { region } = regionContext || {}; // luôn khai báo hook trước
 
+  const { cart, setCart } = useContext(CartContext)!;
+
   const route = useRoute<ProductDetailRouteProp>();
   const { productId } = route.params;
   const [product, setProduct] = useState<any>(null);
@@ -42,6 +44,7 @@ const ProductDetailScreen = ({ navigation }: ProductDetailProps) => {
 
   useEffect(() => {
     // Fetch products from Medusa backend
+    if (!region?.id) return;
     const fetchProduct = async () => {
       try {
         setLoading(true);
@@ -56,7 +59,7 @@ const ProductDetailScreen = ({ navigation }: ProductDetailProps) => {
       }
     };
     fetchProduct();
-  }, [productId]);
+  }, [productId, region?.id]);
 
   // state lưu option selections
   const [selectedOptions, setSelectedOptions] = useState<
@@ -259,13 +262,38 @@ const ProductDetailScreen = ({ navigation }: ProductDetailProps) => {
             <RegularButton
               label='Add to cart'
               buttonWidth={screenWidth * 0.8 * 0.35}
-              onPress={() => {
+              onPress={async () => {
                 if (!selectedVariant) {
                   alert('Please select all options first');
                   return;
                 }
-                console.log('Add to cart variant', selectedVariant.id);
-                navigation.navigate('MyCart');
+
+                if (!region?.id) {
+                  alert('Region not available');
+                  return;
+                }
+
+                try {
+                  let activeCart = cart;
+
+                  if (!activeCart) {
+                    const res = await createCart(region.id);
+                    activeCart = res?.data.cart;
+                    setCart(activeCart);
+                  }
+
+                  const updated = await addItemToCart(
+                    activeCart.id,
+                    selectedVariant,
+                    1
+                  );
+
+                  setCart(updated?.data.cart);
+                  navigation.navigate('MyCart');
+                } catch (error) {
+                  console.error('Add to cart failed', error);
+                  alert('Add to cart failed');
+                }
               }}
             />
           </View>
