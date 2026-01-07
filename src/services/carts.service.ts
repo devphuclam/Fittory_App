@@ -114,14 +114,14 @@ export async function addShippingMethod(cartId: string, optionId: string) {
   }
 }
 
-export async function createPaymentSessions(cartId: string) {
+export async function completeCart(cartId: string) {
   try {
-    const r = await api.post(`/store/carts/${cartId}/payment-sessions`);
-    console.log('Create Payment Session', r);
+    const r = await api.post(`/store/carts/${cartId}/complete`);
+    console.log('Complete Cart: ', r.data);
     return r;
   } catch (error) {
     console.error(
-      'Error creating Payment Session:',
+      'Error completing cart:',
       (error as any)?.response?.data || error
     );
   }

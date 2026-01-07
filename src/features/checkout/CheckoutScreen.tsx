@@ -23,7 +23,12 @@ import { CartContext } from '../../contexts/CartContext';
 import {
   getShippingOptions,
   addShippingMethod,
+  completeCart,
 } from '../../services/carts.service';
+import {
+  createPaymentCollection,
+  initializePaymentSession,
+} from '../../services/payments.service';
 
 const { width: screenWidth } = Dimensions.get('window');
 type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
@@ -85,6 +90,9 @@ const CheckoutScreen = () => {
   if (!cartContext) return null;
 
   const { cart, setCart } = cartContext;
+
+  const navigation = useNavigation<NavigationProp>();
+  const [loadingOrder, setLoadingOrder] = useState(false);
 
   const countryOptions: RadioButtonOption[] = cart.region.countries.map(
     (c: { iso_2: string; display_name: string }) => ({
@@ -156,6 +164,20 @@ const CheckoutScreen = () => {
     }));
   }, [selectedCountry]);
 
+  useEffect(() => {
+    if (!cart?.shipping_methods?.length) return;
+    if (cart.payment_collection_id) return;
+
+    createPaymentCollection(cart.id).then((res) => {
+      if (res?.data?.payment_collection) {
+        setCart((prev: typeof cart) => ({
+          ...prev!,
+          payment_collection_id: res.data.payment_collection.id,
+        }));
+      }
+    });
+  }, [cart?.shipping_methods]);
+
   const handleSelectShipping = async (option: RadioButtonOption) => {
     if (!cart) return;
 
@@ -165,6 +187,50 @@ const CheckoutScreen = () => {
     if (res?.data?.cart) {
       setCart(res.data.cart);
       console.log('Cart Total: ', cart.total);
+    }
+  };
+
+  const handleSelectPaymentMethod = async (option: RadioButtonOption) => {
+    if (!cart?.payment_collection_id) return;
+
+    setPaymentMethod(option);
+
+    const res = await initializePaymentSession(
+      cart.payment_collection_id,
+      option.id
+    );
+
+    if (res?.data?.payment_collection) {
+      setCart((prev: typeof cart) => ({
+        ...prev!,
+        payment_collection: res.data.payment_collection,
+      }));
+    }
+  };
+
+  const AVAILABLE_PAYMENT_PROVIDERS: RadioButtonOption[] = [
+    { id: 'pp_system_default', label: 'Cash on Delivery', price: 0 },
+  ];
+
+  const handlePlaceOrder = async () => {
+    if (!cart) return;
+
+    try {
+      setLoadingOrder(true);
+
+      const res = await completeCart(cart.id); // gọi API completeCart
+
+      if (res?.data?.order) {
+        console.log('Order created:', res.data.order);
+
+        navigation.navigate('OrderDetail', {
+          orderId: res.data.order.id,
+        });
+      }
+    } catch (err) {
+      console.error('Place order error:', err);
+    } finally {
+      setLoadingOrder(false);
     }
   };
 
@@ -330,19 +396,15 @@ const CheckoutScreen = () => {
           <Text style={styles.titleText}>Payment Method</Text>
           <View style={styles.paymentMethodSection}>
             <RadioButtonGroup
-              options={[
-                { id: '1', label: 'Credit Card', price: 0 },
-                { id: '2', label: 'PayPal', price: 0 },
-                { id: '3', label: 'Cash on Delivery', price: 0 },
-              ]}
+              options={AVAILABLE_PAYMENT_PROVIDERS}
               selected={paymentMethod}
-              onSelect={setPaymentMethod}
+              onSelect={handleSelectPaymentMethod}
             />
           </View>
           <RegularButtonWithIcon
             label=' Place Order'
             icon={ICONS.order}
-            onPress={() => {}}
+            onPress={handlePlaceOrder}
           />
         </View>
       </ScrollView>
