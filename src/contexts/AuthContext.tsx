@@ -9,7 +9,19 @@ import {
   registerAuthOnly,
   createStoreCustomer,
 } from '../api/api'; // getToken exported above
-import { TOKEN_KEY } from '../config';
+import { TOKEN_KEY } from "../config"
+import AuthError from "expo-auth-session"
+import * as AuthSession from 'expo-auth-session';
+
+export type AuthUser = {
+  id: string;
+  email: string;
+  name?: string;
+  provider?: string;
+  exp?: number;
+  cookiesExp?: number;
+}
+
 
 interface AuthContextType {
   user: any | null;
@@ -22,14 +34,17 @@ interface AuthContextType {
   ) => Promise<any>;
   signOut: () => Promise<void>;
   refreshUser?: () => Promise<any>;
+  fetchWithAuth: (url: string, options: RequestInit) => Promise<Response>;
+
 }
 
 export const AuthContext = createContext<AuthContextType>({
-  user: null,
+  user: null as AuthUser | null,
   loadingInitial: true,
   signIn: async () => null,
   signUp: async () => null,
-  signOut: async () => {},
+  signOut: async () => { },
+  fetchWithAuth: async () => new Response(),
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -88,6 +103,14 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(profile ?? null);
     return profile;
   };
+  const fetchWithAuth = async (url: string, options: RequestInit): Promise<Response> => {
+    const token = await SecureStore.getItemAsync(TOKEN_KEY);
+    const headers = {
+      ...options.headers,
+      Authorization: token ? `Bearer ${token}` : '',
+    };
+    return fetch(url, { ...options, headers });
+  }
   return (
     <AuthContext.Provider
       value={{
@@ -97,9 +120,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         signOut,
         signUp,
         refreshUser,
+        fetchWithAuth,
       }}
     >
       {children}
     </AuthContext.Provider>
   );
 }
+
+export const useAuth = () => {
+  const context = React.useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
+};
+

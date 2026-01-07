@@ -9,6 +9,7 @@ import AnimatedLink from '../../components/AnimatedLink/AnimatedLink';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { RootStackParamList } from '../../navigations/AppNavigator';
 import { AuthContext } from '../../contexts/AuthContext';
+import { AuthProvider } from '../../contexts/AuthContext';
 
 const { width: screenWidth } = Dimensions.get('window');
 type Props = NativeStackScreenProps<RootStackParamList, 'SignIn'>;
@@ -43,7 +44,7 @@ const SignInScreen = ({ navigation }: Props) => {
           inputHeight={40}
           value={email}
           onChangeText={setEmail}
-          // secureTextEntry
+        // secureTextEntry
         />
         <InputWithIcon
           placeholder='Password'
